@@ -1,32 +1,1477 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome to My GitHub Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-    h1 {
-      color: #333;
-    }
-    a {
-      margin-top: 1rem;
-      color: #007acc;
-      text-decoration: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superhelden van het Internet - Interactieve Gids</title>
+    <!-- Tailwind CSS laden voor moderne styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js voor grafieken -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Algemene body en font instellingen */
+        body {
+            background-color: #f0f7ff; /* Lichte achtergrondkleur */
+            font-family: 'Inter', sans-serif; /* Standaard font */
+            color: #1e293b; /* Donkere tekstkleur */
+        }
+        /* Importeer Google Fonts voor Inter en Nunito */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700;900&display=swap');
+        h1, h2, h3 {
+            font-family: 'Nunito', sans-serif; /* Speciale font voor koppen */
+            font-weight: 900; /* Extra dikke koppen */
+        }
+
+        /* Stijl voor de navigatielinks aan de zijkant */
+        .nav-link {
+            transition: all 0.2s ease-in-out; /* Vloeiende overgang bij hover/actief */
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem; /* Grootte van de iconen */
+            border-radius: 9999px; /* Volledig afgeronde knoppen */
+            color: #475569; /* Standaard icon kleur */
+        }
+        .nav-link.active {
+            background-color: #4f46e5; /* Achtergrondkleur voor actieve link */
+            color: white; /* Tekstkleur voor actieve link */
+            transform: scale(1.1); /* Iets groter bij actief */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Schaduw voor actieve link */
+        }
+        .nav-link:hover:not(.active) {
+            background-color: #e0e7ff; /* Lichtere achtergrond bij hover */
+            transform: scale(1.05);
+        }
+
+        /* Specifieke stijlen voor phishing hotspot functionaliteit */
+        .phishing-hotspot {
+            position: absolute;
+            border: 2px dashed red; /* Rode stippellijn om hotspot aan te geven */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .phishing-hotspot:hover {
+            background-color: rgba(255, 0, 0, 0.2); /* Rode overlay bij hover */
+        }
+        .hotspot-info {
+            position: absolute;
+            background-color: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Zachte schaduw */
+            border: 1px solid #e2e8f0;
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0; /* Standaard onzichtbaar */
+            pointer-events: none; /* Niet klikbaar wanneer onzichtbaar */
+            transform: translateY(10px); /* Lichte verschuiving naar beneden */
+            z-index: 20;
+            text-align: left;
+            width: 150px; /* Standaard breedte voor mobiel */
+            font-size: 0.8rem;
+        }
+        .hotspot-info.visible {
+            opacity: 1; /* Zichtbaar maken */
+            transform: translateY(0); /* Terug naar originele positie */
+        }
+        @media (min-width: 768px) {
+            .hotspot-info {
+                width: 250px; /* Bredere info box op desktop */
+                font-size: 1rem;
+            }
+        }
+
+        /* Stijl voor informatiekaarten (gebruikt in Privacy, Tools, Hulp) */
+        .info-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Vloeiende animatie */
+            border-radius: 1rem; /* Afgeronde hoeken */
+        }
+        .info-card:hover {
+            transform: translateY(-5px); /* Iets omhoog bij hover */
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); /* Grotere schaduw */
+        }
+
+        /* Stijl voor de wachtwoordsterktebalk */
+        .password-strength-bar {
+            height: 12px;
+            border-radius: 9999px; /* Volledig afgeronde balk */
+            transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out; /* Animatie voor breedte en kleur */
+        }
+
+        /* Stijl voor inklapbare secties (toggle) */
+        .toggle-btn {
+            background-color: #6366f1; /* Paarse achtergrond */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .toggle-btn:hover {
+            background-color: #4f46e5; /* Donkerder paars bij hover */
+        }
+        .toggle-content {
+            max-height: 0; /* Standaard verborgen */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out; /* Inklap/uitklap animatie */
+            padding: 0 1rem;
+        }
+        .toggle-content.open {
+            max-height: 500px; /* Max hoogte bij open (voldoende voor inhoud) */
+            transition: max-height 0.5s ease-in;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Stijl voor quizopties */
+        .quiz-option {
+            background-color: #e2e8f0; /* Lichte grijze achtergrond */
+            color: #475569; /* Donkergrijze tekst */
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            width: 100%;
+            font-size: 1.1rem;
+            text-align: left;
+            transition: background-color 0.2s, transform 0.2s;
+            border: 2px solid transparent; /* Transparante rand standaard */
+            cursor: pointer;
+        }
+        .quiz-option:hover:not(.selected):not(.correct):not(.incorrect) {
+            background-color: #cbd5e1; /* Donkerder grijs bij hover */
+            transform: translateY(-2px);
+        }
+        .quiz-option.selected {
+            border-color: #6366f1; /* Paarse rand bij geselecteerd */
+            background-color: #e0e7ff; /* Lichtere paarse achtergrond */
+        }
+        .quiz-option.correct {
+            background-color: #d1fae5; /* Groene achtergrond bij correct */
+            border-color: #34d399; /* Groene rand */
+            color: #065f46; /* Donkergroene tekst */
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2; /* Rode achtergrond bij incorrect */
+            border-color: #ef4444; /* Rode rand */
+            color: #991b1b; /* Donkerrode tekst */
+        }
+
+        /* Stijl voor quiz uitleg */
+        .quiz-rationale {
+            background-color: #eff6ff; /* Lichte blauwe achtergrond */
+            border-left: 4px solid #3b82f6; /* Blauwe rand links */
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: #1e40af; /* Donkerblauwe tekst */
+            text-align: left;
+        }
+
+        /* Stijl voor Chart.js container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max breedte voor de grafiek */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Stijl voor de interactieve stelling/vraag */
+        .statement-container {
+            cursor: pointer;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .statement-container:hover {
+            background-color: #e0e7ff; /* Lichte paarse achtergrond bij hover */
+            transform: translateY(-3px);
+        }
+        .statement-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+            margin-top: 1rem;
+        }
+        .statement-answer.open {
+            max-height: 200px; /* Voldoende hoogte voor de tekst */
+            opacity: 1;
+            transition: max-height 0.7s ease-in, opacity 0.7s ease-in;
+        }
+
+        /* Stijl voor Probleem/Oplossing kaarten */
+        .problem-card {
+            background-color: #fee2e2; /* Lichtrood */
+            border-left: 5px solid #ef4444; /* Rode rand */
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1rem;
+        }
+        .solution-card {
+            background-color: #d1fae5; /* Lichtgroen */
+            border-left: 5px solid #34d399; /* Groene rand */
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        /* Nieuwe stijlen voor de vergrootbare afbeelding */
+        .zoomable-image {
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, max-width 0.3s ease-in-out;
+            max-width: 400px; /* Originele breedte */
+            width: 100%;
+            display: block; /* Zorgt ervoor dat margin auto werkt */
+            margin: 0 auto; /* Centreer de afbeelding */
+        }
+
+        .zoomable-image.zoomed {
+            transform: scale(1.5); /* Vergroot de afbeelding */
+            max-width: 80%; /* Laat het een groter deel van de container innemen, maar niet overschrijden */
+            position: relative; /* Zodat z-index werkt */
+            z-index: 100; /* Zorg dat het boven andere elementen is */
+        }
+
+         /* Responsive image scaling */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Keyframes voor de pulse animatie */
+        @keyframes pulse-once {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .animate-pulse-once {
+            animation: pulse-once 1s ease-in-out 1; /* Speel één keer af */
+        }
+
+        /* Keyframes voor de bounce animatie */
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Nieuwe stijl voor opvallende tekst in phishing intro */
+        .phishing-highlight {
+            font-size: 1.5rem; /* Grotere tekst */
+            font-weight: 900; /* Extra vet */
+            color: #ef4444; /* Rode kleur voor opvallendheid */
+            display: inline-block; /* Zorgt ervoor dat transformaties werken */
+            transition: transform 0.2s ease-in-out;
+        }
+        .phishing-highlight:hover {
+            transform: translateY(-3px) scale(1.05); /* Subtiele lift en schaal bij hover */
+        }
+        .phishing-highlight.animated {
+            animation: bounce-subtle 0.8s ease-in-out infinite; /* Continue subtiele bounce */
+        }
+
+        /* Stijl voor opvallende voorbeelden */
+        .example-highlight {
+            font-weight: bold;
+            color: #3b82f6; /* Blauwe kleur voor voorbeelden */
+            background-color: #e0f2fe; /* Lichtblauwe achtergrond */
+            padding: 0.2em 0.4em;
+            border-radius: 0.3em;
+            white-space: nowrap; /* Voorkomt afbreken op meerdere regels */
+        }
+
+        /* Stijl voor interactieve gouden regels */
+        .golden-rule-content {
+            font-size: 1rem; /* Standaard lettergrootte */
+            transition: font-size 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+        .golden-rule-card.active .golden-rule-content {
+            font-size: 1.25rem; /* Groter bij actief */
+            color: #1a202c; /* Donkerdere tekstkleur */
+            font-weight: 600;
+        }
+        .golden-rule-card:hover {
+            transform: translateY(-5px); /* Iets omhoog bij hover */
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); /* Grotere schaduw */
+            background-color: #f0f7ff; /* Lichte achtergrond bij hover */
+        }
+
+        /* Nieuwe stijlen voor de zoomable blocks in de presentatie */
+        .zoomable-block {
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            position: relative; /* Zorgt ervoor dat z-index werkt bij initial state */
+            z-index: 1; /* Standaard z-index */
+        }
+
+        .zoomable-block.zoomed {
+            position: fixed; /* Blijft op zijn plaats bij scrollen */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(1.5); /* 1.5x vergroten en centreren */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); /* Meer opvallende schaduw */
+            z-index: 1000; /* Zorgt ervoor dat het boven alles verschijnt */
+            width: 90vw; /* Behoud een percentage van de viewport breedte */
+            max-width: 700px; /* Max breedte om niet te gigantisch te worden */
+            height: auto;
+            max-height: 90vh; /* Max hoogte om verticaal te passen */
+            overflow-y: auto; /* Scrollen mogelijk als inhoud te groot is */
+            border-radius: 1.5rem; /* Consistentie met andere kaarten */
+        }
+
+        /* Overlay stijl */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparant zwart */
+            z-index: 999; /* Lager dan de gezoomde block, maar hoger dan de rest */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Styling voor specifieke elementen binnen gezoomde blocks */
+        .zoomable-block.zoomed .statement-answer,
+        .zoomable-block.zoomed .toggle-content {
+            max-height: unset; /* Toon volledige hoogte als gezoomd */
+            opacity: 1;
+            transition: none; /* Schakel overgang uit voor directe weergave bij zoom */
+        }
+
+        /* Nieuwe stijlen voor de hotspot-info wanneer deze gezoomd is */
+        .hotspot-info.zoomed {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(1.5); /* 1.5x vergroten en centreren */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            z-index: 1001; /* Hoger dan reguliere zoomable-block */
+            width: 90vw;
+            max-width: 500px; /* Max breedte om niet te gigantisch te worden */
+            height: auto;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem; /* Meer padding wanneer gezoomd */
+            border-radius: 1rem;
+            background-color: white; /* Zorg voor een achtergrondkleur wanneer vast */
+            visibility: visible; /* Zorg dat het zichtbaar is */
+            opacity: 1; /* Zorg dat het zichtbaar is */
+        }
+    </style>
 </head>
-<body>
-  <h1>Hello from spompan.github.io 👋</h1>
-  <p>This page is hosted with GitHub Pages!</p>
-  <a href="https://github.com/spompan" target="_blank">Visit my GitHub profile</a>
+<body class="flex">
+
+    <!-- Zijnavigatie (zichtbaar op grotere schermen) -->
+    <nav id="side-nav" class="hidden md:flex flex-col items-center w-24 bg-white/80 backdrop-blur-md shadow-lg p-4 space-y-4 fixed top-0 left-0 h-full z-30">
+        <!-- <div class="text-2xl font-black text-indigo-600">SH</div> Afkorting voor Superhelden -->
+        <a href="#intro" class="nav-link" data-section="intro" title="Introductie">🚀</a>
+        <a href="#wachtwoorden-intro" class="nav-link" data-section="wachtwoorden-intro" title="Wachtwoorden Intro">🔑</a>
+        <a href="#wachtwoorden-zwak" class="nav-link" data-section="wachtwoorden-zwak" title="Zwakke Wachtwoorden">❌</a>
+        <a href="#wachtwoorden-sterk-uitleg" class="nav-link" data-section="wachtwoorden-sterk-uitleg" title="Sterke Wachtwoorden">💪</a>
+        <a href="#wachtwoorden-sterk-check" class="nav-link" data-section="wachtwoorden-sterk-check" title="Wachtwoord Check">🔎</a>
+        <a href="#wachtwoorden-gouden-regels" class="nav-link" data-section="wachtwoorden-gouden-regels" title="Gouden Regels">🥇</a>
+        <a href="#wachtwoorden-manager" class="nav-link" data-section="wachtwoorden-manager" title="Wachtwoord Manager">🔐</a>
+        <a href="#tweestapsverificatie" class="nav-link" data-section="tweestapsverificatie" title="2FA">🛡️</a>
+        <a href="#phishing-intro" class="nav-link" data-section="phishing-intro" title="Phishing Intro">🎣</a>
+        <a href="#phishing-details" class="nav-link" data-section="phishing-details" title="Phishing Details">👀</a>
+        <a href="#privacy" class="nav-link" data-section="privacy" title="Privacy">🤫</a>
+        <a href="#vrienden" class="nav-link" data-section="vrienden" title="Vrienden Online">💖</a>
+        <a href="#gevaren" class="nav-link" data-section="gevaren" title="Gevaren Online">💀</a>
+        <a href="#slimme_tools" class="nav-link" data-section="slimme_tools" title="Slimme Tools">💡</a>
+        <a href="#hulp" class="nav-link" data-section="hulp" title="Hulp">🆘</a>
+        <a href="#quiz-start" class="nav-link" data-section="quiz-start" title="Quiz">🏆</a>
+        <a href="#vragenronde" class="nav-link" data-section="vragenronde" title="Vragenronde">❓</a>
+    </nav>
+
+    <!-- Hoofdinhoud van de presentatie -->
+    <main class="w-full md:ml-24">
+
+        <!-- Introductie Sectie (Dia 1 uit Word) -->
+        <section id="intro" class="min-h-screen flex items-center justify-center p-6 bg-indigo-600 text-white relative overflow-hidden">
+            <div class="absolute -bottom-20 -right-20 w-72 h-72 bg-indigo-500 rounded-full opacity-50"></div>
+            <div class="absolute -top-20 -left-20 w-72 h-72 bg-indigo-500 rounded-full opacity-50"></div>
+            <div class="text-center z-10">
+                <h1 class="text-6xl md:text-8xl font-black mb-4">Superhelden van het Internet – Bescherm Jezelf Online! 🦸‍♀️🦸‍♂️</h1>                
+                <div class="w-64 h-64 md:w-80 md:h-80 mx-auto mt-10 bg-indigo-400 rounded-full flex items-center justify-center shadow-xl animate-bounce-slow">
+                    <img src="helden.png" alt="Afbeelding van een superheld met een schild of slot" class="rounded-full object-cover p-4">
+                </div>
+                <br/>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto text-indigo-200">
+                    Door: Sirilak Pompan, Softwareontwikkelaar van Hogeschool Inholland<br/>                                    
+                </p>               
+            </div>
+        </section>
+
+        <!-- Wachtwoorden Intro Sectie (Deel van Dia 2 uit Word) -->
+        <section id="wachtwoorden-intro" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-blue-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Je Wachtwoord: De Geheime Code van je Kluis! 🔑</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    "Wist je dat de gemiddelde Nederlander zo'n 25 tot 30 online accounts heeft? Denk aan TikTok, Instagram, Spotify, Netflix, schoolaccounts... Welke accounts hebben jullie allemaal? 🤔"
+                    <br><br>
+                    "Superveel! En al die accounts moeten jullie beveiligen met een uniek en sterk wachtwoord. Maar dat doen bijna mensen niet... 😱"
+                </p>
+                <div class="w-full flex justify-center mb-8">
+                    <img src="socialmedias2.png" alt="Afbeelding van social media en streaming iconen" class="rounded-lg shadow-lg max-w-full h-auto">
+                </div>                
+            </div>
+        </section>
+
+        <!-- Zwakke Wachtwoorden Sectie (Dia 3 uit Word) -->
+        <section id="wachtwoorden-zwak" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-red-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Het Grote Wachtwoord Mysterie (Niet doen! ❌)</h2>
+                <p class="text-lg text-slate-700 text-center mb-6">"Welke wachtwoorden worden door veel mensen gebruikt? 🙈"</p>
+                
+                <!-- Interactieve Vraag/Stelling voor slechte wachtwoorden -->
+                <div id="statement-interactive-bad-passwords" class="statement-container text-center mb-6 zoomable-block">
+                    <p class="text-lg text-slate-700 font-semibold cursor-pointer">
+                        **Stelling:** "Ik weet welke wachtwoorden de meeste mensen gebruiken!" 🧐 <br>
+                        <span class="text-sm text-indigo-500">Klik om te zien of je het goed hebt!</span>
+                    </p>
+                    <div id="statement-answer-bad-passwords" class="statement-answer text-left bg-gray-50 p-4 rounded-lg shadow-inner">
+                        <p class="text-xl font-bold text-red-600 mb-2">Dit zijn voorbeelden van slechte wachtwoorden: 😱</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700 text-lg">
+                            <li><span class="example-highlight">'123456'</span>, <span class="example-highlight">'qwerty'</span>, <span class="example-highlight">'12345'</span> (simpele rijtjes, te snel geraden!)</li>
+                            <li><span class="example-highlight">'welkom123'</span>, <span class="example-highlight">'W3lk0m'</span>, <span class="example-highlight">'Welkom!'</span> (varianten op 'welkom', hackers kennen ze!)</li>
+                            <li><span class="example-highlight">'Gehiem'</span>, <span class="example-highlight">'Verkeerd'</span> (grappig, maar niet veilig!)</li>
+                            <li>Plaatsnamen of favoriete sportclubs (staan in wachtwoordenboeken!)</li>
+                            <li>Je naam, geboortedatum, huisdier of idool (persoonlijke info, makkelijk te vinden!)</li>
+                            <li>Letters vervangen door symbolen: <span class="example-highlight">'h@ck3r'</span> (computer raadt dit ook snel!)</li>
+                        </ul>
+                    </div>
+                </div>              
+
+                <div class="bg-white p-6 rounded-2xl shadow-lg mt-8 zoomable-block" id="bad-passwords-examples">
+                    <h3 class="text-2xl font-bold mb-4 text-red-700 flex items-center">
+                        <span class="text-3xl mr-2">🚫</span> Voorbeelden van wachtwoorden die je **NIET** moet gebruiken:
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-700 text-lg">
+                        <li><strong>Simpele rijtjes:</strong> Zoals <span class="example-highlight">'123456'</span> of <span class="example-highlight">'qwerty'</span>. Computers raden deze supersnel! 💨</li>
+                        <li><strong>Welkomst-varianten:</strong> Zoals <span class="example-highlight">'Welkom123'</span> of <span class="example-highlight">'W3lk0m'</span>. Hackers kennen al deze trucjes. 🥸</li>
+                        <li><strong>Grappige woorden:</strong> Zoals <span class="example-highlight">'Gehiem'</span> of <span class="example-highlight">'Verkeerd'</span>. En ook geen plaatsnamen of je favoriete voetbalclub. Die staan vaak in het 'wachtwoordenboek' van hackers. 📖</li>
+                        <li><strong>Persoonlijke info:</strong> Zoals je naam, geboortedatum, huisdier of je gebruikersnaam. Die vinden hackers soms makkelijk online! 🕵️‍♀️</li>
+                        <li><strong>Simpele symbolen:</strong> Als je letters vervangt door getallen (<span class="example-highlight">'A'</span> door <span class="example-highlight">'@'</span>, <span class="example-highlight">'E'</span> door <span class="example-highlight">'3'</span>, <span class="example-highlight">'S'</span> door <span class="example-highlight">'$'</span>), dan raden computers dat ook zo. 🤯</li>
+                    </ul>
+                    <p class="text-lg text-red-600 mt-4 font-semibold">
+                        Kortom: Wees lekker creatief en onvoorspelbaar! Hoe gekker, hoe beter! 🤪
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sterke Wachtwoorden Uitleg Sectie (Deel van Dia 4 & 5 uit Word) -->
+        <section id="wachtwoorden-sterk-uitleg" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-green-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Het Grote Wachtwoord Mysterie (Wat is een sterk wachtwoord? 💪)</h2>
+                
+                <!-- Interactieve Stelling - Make this more striking -->
+                <div id="statement-interactive-1" class="statement-container text-center mb-6 p-8 bg-yellow-200 rounded-xl shadow-xl border-4 border-yellow-400 animate-pulse-once cursor-pointer zoomable-block">
+                    <p class="text-3xl md:text-4xl font-black text-red-700 mb-4">
+                        **Grote Vraag voor Superhelden!** 💥
+                    </p>
+                    <p class="text-xl md:text-2xl text-slate-700 font-semibold">
+                        "Een kort wachtwoord met veel verschillende tekens is moeilijker te hacken dan een lang wachtwoord zonder speciale tekens." 🧐 <br>
+                        <span class="text-lg text-indigo-700 font-bold mt-2 block">Klik om het antwoord te ontdekken! 👇</span>
+                    </p>
+                    <p id="statement-answer-1" class="statement-answer text-3xl font-bold text-green-600 mt-4">
+                        **Antwoord:** "Dat klopt niet! 🤯"
+                    </p>
+                </div>
+
+                <!-- Reveal area for image and text -->
+                <div id="bruteforce-reveal-area" class="w-full flex flex-col items-center justify-center p-8 bg-blue-100 rounded-lg shadow-inner cursor-pointer hover:bg-blue-200 transition-all duration-300">
+                    <span class="text-6xl mb-4">▶️</span>
+                    <p class="text-xl font-bold text-blue-700 text-center">Klik hier om te zien hoe snel wachtwoorden gekraakt worden!</p>
+                    <p class="text-sm text-blue-500 mt-2">Ontdek het brute-force geheim</p>
+                </div>
+
+                <div id="bruteforce-content" class="hidden zoomable-block"> <!-- Add zoomable-block here -->
+                    <div class="w-full flex justify-center mb-8 mt-8">
+                        <img id="bruteforce-image" src="bruteforce.png" alt="Afbeelding van brute-force kraaktijd" width="400" class="rounded-lg shadow-lg zoomable-image">
+                    </div>    
+                    <p id="bruteforce-text-info" class="text-lg text-slate-700 text-center mb-8">
+                        "Een wachtwoord van 5 tekens met cijfers, hoofdletters en kleine letters zou een hacker slechts 2 uur kosten om te kraken. Maar een wachtwoord van 18 tekens met cijfers, symbolen, hoofdletters en kleine letters zou 463 triljard jaar duren. ⏳🔒"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sterke Wachtwoorden Check Sectie (Deel van Dia 5 uit Word) -->
+        <section id="wachtwoorden-sterk-check" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-lime-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Test Je Sterke Wachtwoord! 🔎</h2>
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-white p-6 rounded-2xl shadow-lg zoomable-block" id="password-checker-block">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center text-indigo-700">
+                            <span class="text-3xl mr-2">🔎</span> De Superhelden Wachtwoord Check
+                        </h3>
+                        <p class="mb-6">Kijk eens hoe sterk jouw wachtwoord kan zijn! Typ hieronder een wachtwoord en kijk hoe lang het duurt om te kraken. ⏱️</p>
+                        <div>
+                            <label for="password-input" class="font-bold text-slate-700 block mb-2">Typ een wachtwoord (het wordt niet opgeslagen!):</label>
+                            <input type="text" id="password-input" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 text-lg font-mono" placeholder="bv. Skibidi.Toilet.Gek.Huis">
+                            <div class="mt-4">
+                                <p class="font-bold text-slate-700">Sterkte:</p>
+                                <div class="w-full bg-gray-200 rounded-full h-4 mt-1">
+                                    <div id="strength-bar" class="password-strength-bar bg-red-500" style="width: 0%"></div>
+                                </div>
+                                <p id="strength-text" class="text-sm text-center mt-1 text-gray-600">Begin met typen!</p>
+                            </div>
+                            <div class="mt-4">
+                                <p class="font-bold text-slate-700">Tijd om te kraken:</p>
+                                <p id="crack-time" class="text-lg font-semibold mt-1 text-indigo-600">...</p>
+                            </div>                          
+                        </div>
+                    </div>                    
+                    <div id="strong-password-tips-block" class="zoomable-block"> <!-- Added id and zoomable-block class -->
+                        <h3 class="text-2xl font-bold mb-4 flex items-center text-indigo-700">
+                            <span class="text-3xl mr-2">🧠</span> Hoe maak je een sterk wachtwoord?
+                        </h3>
+                        <p class="mb-6 text-slate-700 ">
+                            "Een lang wachtwoord kun je maken door 3 of 4 willekeurige woorden achter elkaar te zetten, met bijvoorbeeld een punt ertussen. Denk aan: <code class="bg-gray-100 p-1 rounded-md text-purple-700">Bruh.Skippybal.Sigma.Riz</code> of <code class="bg-gray-100 p-1 rounded-md text-purple-700">Skibidi.Tuinhek.Blauwekamp.No-Cap</code>. 💡"
+                        </p>
+                        <p class="text-lg text-slate-700 mb-4">
+                            <!-- De bijgewerkte lijst met iconen en styling -->
+                            <ul class="list-none space-y-3 p-4 bg-green-100 rounded-lg shadow-md">
+                                <li class="flex items-center text-green-800 font-semibold"><span class="text-2xl mr-2">📏</span> Hoe langer, hoe veiliger</li>
+                                <li class="flex items-center text-green-800 font-semibold"><span class="text-2xl mr-2">✍️</span> Kies een zin (wachtzin)</li>
+                                <li class="flex items-center text-green-800 font-semibold"><span class="text-2xl mr-2">🔤</span> Combineer kleine letters en HOOFDLETTERS</li>
+                                <li class="flex items-center text-green-800 font-semibold"><span class="text-2xl mr-2">⁉️</span> Gebruik een leesteken (zoals een punt of uitroepteken)</li>
+                                <li class="flex items-center text-green-800 font-semibold"><span class="text-2xl mr-2">🔢</span> Combineer cijfers en letters</li>
+                                <li class="flex items-center text-red-700 font-semibold"><span class="text-2xl mr-2">🚫</span> Gebruik GEEN persoonlijke informatie (naam, datum, dier)</li>
+                                <li class="flex items-center text-red-700 font-semibold"><span class="text-2xl mr-2">📝</span> Schrijf je wachtwoord NOOIT op (gebruik een manager!)</li>
+                                <li class="flex items-center text-red-700 font-semibold"><span class="text-2xl mr-2">🗣️</span> Geef je wachtwoord NOOIT door aan anderen</li>
+                            </ul>
+                        </p>                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gouden Regels Sectie (Deel van Dia 5 uit Word) -->
+        <section id="wachtwoorden-gouden-regels" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-orange-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Onze 3 Gouden Regels! 🥇</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    Dit zijn de allerbelangrijkste regels om je wachtwoorden superveilig te houden! Onthoud deze goed. ✨
+                </p>
+                <div class="space-y-4">
+                    <div class="info-card bg-white p-5 rounded-xl shadow-md golden-rule-card cursor-pointer zoomable-block">
+                        <h4 class="font-bold text-indigo-600 flex items-center"><span class="text-2xl mr-2">1️⃣</span> Maak het lang en gek</h4>
+                        <p class="text-slate-600 golden-rule-content">Gebruik 4 willekeurige woorden. Dat is makkelijk te onthouden, maar super moeilijk te raden. Lengte is je grootste superkracht! 📏</p>
+                    </div>
+                    <div class="info-card bg-white p-5 rounded-xl shadow-md golden-rule-card cursor-pointer zoomable-block">
+                        <h4 class="font-bold text-indigo-600 flex items-center"><span class="text-2xl mr-2">2️⃣</span> Gebruik overal een ANDER wachtwoord</h4>
+                        <p class="text-slate-600 golden-rule-content">Zo kan een dief, als hij één wachtwoord steelt, niet bij al je andere accounts. Gebruik dus niet dezelfde sleutel voor elke kluis.☝️</p>
+                    </div>
+                    <div class="info-card bg-white p-5 rounded-xl shadow-md golden-rule-card cursor-pointer zoomable-block">
+                        <h4 class="font-bold text-indigo-600 flex items-center"><span class="text-2xl mr-2">3️⃣</span> Gebruik een Wachtwoordmanager</h4>
+                        <p class="text-slate-600 golden-rule-content">Dat is een superveilige kluis op je computer of telefoon die al je wachtwoorden voor je onthoudt. Jij hoeft er maar één te weten! 🎒🔐</p>
+                    </div>
+                    <p class="text-lg text-slate-700 zoomable-block" id="golden-rules-summary">
+                        "Het belangrijkste is dat het uniek is voor elk account en dat jij het makkelijk kunt onthouden, maar een hacker niet! Namen van familieleden, huisdieren, idolen, je gebruikersnaam of geboortedatum zijn geen goede wachtwoorden, die informatie halen hackers soms van je social media accounts. 🚫"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wachtwoordmanager Sectie (Dia 6 uit Word) -->
+        <section id="wachtwoorden-manager" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-purple-100">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">De Wachtwoordmanager: Je Digitale Kluis! 🔐</h2>
+                
+                <div class="problem-card text-slate-700 text-lg mb-6 zoomable-block">
+                    <p class="font-bold text-red-800 flex items-center mb-2"><span class="text-2xl mr-2">🤔</span> Probleem:</p>
+                    <p>"Gemiddeld 25 accounts... Hoe onthoud je al die unieke, lange wachtwoorden? Opschrijven op een briefje of in een bestandje op je computer is geen goed idee! 🤯📝"</p>
+                </div>
+
+                <div class="solution-card text-slate-700 text-lg mb-12 zoomable-block">
+                    <p class="font-bold text-green-800 flex items-center mb-2"><span class="text-2xl mr-2">💡</span> Oplossing:</p>
+                    <p>"Gelukkig zijn er wachtwoordmanagers! Dit is een digitale kluis waarin je al je wachtwoorden veilig kunt opslaan. Je hoeft dan maar één heel sterk wachtwoord te onthouden om in te loggen op je wachtwoordmanager. 🔐"</p>
+                </div>
+                
+                <div class="w-full flex justify-center mb-8">
+                    <img src="passwordmanager-horizontal.png" alt="Afbeelding van een digitale kluis of wachtwoordmanager app" width="50%" class="rounded-lg shadow-lg max-w-full h-auto">
+                </div>
+                <p class="text-lg text-slate-700 text-center zoomable-block" id="password-manager-summary">
+                    "Denk aan een superveilige rugzak voor al je geheime codes! 🎒🔒 Populaire apps zijn Microsoft Authenticator, Authy of Google Authenticator."
+                </p>
+            </div>
+        </section>
+
+
+        <!-- Tweestapsverificatie Sectie (Dia 7 & 8 uit Word) -->
+        <section id="tweestapsverificatie" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-purple-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Tweestapsverificatie: Je Extra Schild! 🛡️</h2>
+                
+                <!-- Interactieve Vraag/Stelling -->
+                <div id="statement-interactive-2" class="statement-container text-center mb-6 zoomable-block">
+                    <p class="text-lg text-slate-700 font-semibold cursor-pointer">
+                        "Wat is de meest riskante manier om met wachtwoorden om te gaan?"<br>
+                        <span class="text-sm text-indigo-500">Klik om het antwoord te zien!</span>
+                    </p>
+                    <p id="statement-answer-2" class="statement-answer text-3xl font-bold text-green-600 mt-4">
+                        **Antwoord:** "Het hergebruiken van wachtwoorden! Als één account gehackt wordt, kunnen criminelen ook bij al je andere accounts inloggen. 😲"
+                    </p>
+                </div>
+
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    "Maar er is een extra superkracht: tweestapsverificatie! Dat betekent letterlijk 'een tweede verificatie' om zeker te weten dat jij het bent. Je logt in twee stappen in. Eerst je gebruikersnaam en wachtwoord, en dan nog een code die je bijvoorbeeld via sms op je telefoon krijgt, via een app of zelfs alleen door je telefoon te ontgrendelen. 📱➡️✅"
+                </p>
+                <div class="flex flex-col items-center space-y-8 bg-white p-8 rounded-2xl shadow-lg zoomable-block" id="flow-how-it-works-block">
+                    <h3 class="text-3xl font-bold text-indigo-700 flex items-center"><span class="text-4xl mr-3">Flow</span> Hoe werkt het?</h3>
+                    <div class="flex items-center justify-center space-x-2 sm:space-x-6 md:space-x-12 flex-wrap text-center">
+                        <div class="flex flex-col items-center p-4 rounded-xl">
+                            <span class="text-5xl mb-2">🔑</span>
+                            <p class="font-semibold text-lg">Wachtwoord</p>
+                            <p class="text-sm text-gray-600">(Iets wat je weet)</p>
+                        </div>
+                        <span class="text-4xl text-purple-500 font-bold hidden md:inline-block">➡️</span>
+                        <span class="text-4xl text-purple-500 font-bold inline-block md:hidden">⬇️</span>
+                        <div class="flex flex-col items-center p-4 rounded-xl">
+                            <span class="text-5xl mb-2">📱</span>
+                            <p class="font-semibold text-lg">Telefooncode</p>
+                            <p class="text-sm text-gray-600">(Iets wat je hebt)</p>
+                        </div>
+                        <span class="text-4xl text-purple-500 font-bold hidden md:inline-block">➡️</span>
+                        <span class="text-4xl text-purple-500 font-bold inline-block md:hidden">⬇️</span>
+                        <div class="flex flex-col items-center p-4 rounded-xl">
+                            <span class="text-5xl mb-2">✅</span>
+                            <p class="font-semibold text-lg">Toegang!</p>
+                            <p class="text-sm text-gray-600">(Super veilig)</p>
+                        </div>
+                    </div>
+                    <p class="text-lg text-slate-700 mt-6 max-w-3xl text-center">
+                        "Ook al heeft een hacker je wachtwoord, zonder die extra code kunnen ze niet in je account! Andere namen hiervoor zijn Multi Factor Authenticatie (MFA) of 2FA. 🔒🔐"
+                    </p>
+                    <p class="text-xl md:text-2xl font-semibold text-teal-600">
+                        "Zet tweestapsverificatie vooral aan op je e-mailaccounts, want daarmee kun je vaak wachtwoorden resetten van andere diensten! Zorg ook dat je weet hoe je je account kunt herstellen als je je telefoon kwijtraakt, bijvoorbeeld met back-upcodes. �🆘"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phishing Intro Sectie (Deel van Dia 9, 10, 11 uit Word) -->
+        <section id="phishing-intro" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-red-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Pas Op voor Phishing! 🎣🚫</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    "Phishing is wanneer criminelen je naar een neppe website lokken om je gegevens of geld te stelen. Het is een van de grootste oorzaken van cybersecurity-incidenten. Maar er zijn wel drie dingen waaraan je een neppe mail kunt herkennen: 
+                    <span class="phishing-highlight animated">de afzender 📧</span>, 
+                    <span class="phishing-highlight animated">de link 🔗</span> en 
+                    <span class="phishing-highlight animated">de urgentie ⏰</span>."
+                </p>
+                
+                <div id="phishing-container" class="bg-white p-4 sm:p-6 md:p-8 rounded-2xl shadow-2xl relative max-w-2xl mx-auto"> <!-- Removed zoomable-block from here -->
+                    <div class="flex justify-between items-center mb-4 border-b pb-2">
+                        <div>
+                            <p class="font-bold">Van: <span class="font-normal">Netflix &lt;update@netflex-beveiliging.com&gt;</span></p>
+                            <p class="text-sm text-gray-500">Aan: Jou</p>
+                        </div>
+                        <div class="text-sm text-gray-500">Vandaag</div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">BELANGRIJK: Actie vereist voor uw account! 🚨</h3>
+                    <p class="mb-4">Beste klant,</p>
+                    <p class="mb-6">Er is een probleem met uw laatste betaling. Uw account wordt binnen 24 uur geblokkeerd. Klik NU op de onderstaande link om uw betaalgegevens bij te werken en uw account te heractiveren.</p>
+                    <a href="#" class="text-blue-600 underline font-mono break-all">https://netflex-beveiliging.com/login/update-payment</a>
+                    <p class="mt-6">Met vriendelijke groet,<br>Het Netflix Team</p>
+                    
+                    <!-- Hotspots voor de phishing email -->
+                    <div id="hotspot1" class="phishing-hotspot" style="top: 30px; left: 60px; right: 15px; height: 30px;"></div>
+                    <div id="hotspot2" class="phishing-hotspot" style="top: 140px; left: 15px; right: 15px; height: 30px;"></div>
+                    <div id="hotspot3" class="phishing-hotspot" style="top: 210px; left: 15px; right: 15px; height: 30px;"></div>
+
+                    <!-- Informatieboxen voor de hotspots -->
+                    <div id="hotspot1-info" class="hotspot-info w-64" style="top: 50px; left: 50%; transform: translateX(-50%);">
+                        <p class="font-bold">🚨 Foute Afzender!</p><p class="text-sm">Kijk goed! Er staat 'netflEx' en 'beveiliging.com'. Het echte adres is netflix.com.</p>
+                    </div>
+                    <div id="hotspot2-info" class="hotspot-info w-64" style="top: 195px; left: 50%; transform: translateX(-50%);">
+                        <p class="font-bold">🚨 Haast en Paniek!</p><p class="text-sm">Boeven willen dat je snel klikt zonder na te denken. Trap niet in "binnen 24 uur geblokkeerd!".</p>
+                    </div>
+                     <div id="hotspot3-info" class="hotspot-info w-64" style="bottom: 70px; left: 50%; transform: translateX(-50%);">
+                        <p class="font-bold">🚨 Verdachte Link!</p><p class="text-sm">Deze link gaat niet naar de echte Netflix website. Ga altijd zelf naar de site door het adres in te typen.</p>
+                    </div>
+                </div>
+                 <p class="text-center text-md text-slate-600 mt-8 font-semibold zoomable-block" id="phishing-intro-summary">
+                    Klik op de stippellijnen in de e-mail om de rode vlaggen te ontdekken! 🚩
+                </p>
+            </div>
+        </section>
+
+        <!-- Phishing Details Sectie (Deel van Dia 9, 10, 11 uit Word) -->
+        <section id="phishing-details" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-orange-100">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Phishing: De Afzender, Link en Urgentie! 👀</h2>
+                <p class="text-lg text-slate-700 mb-6">
+                    Phishingmails zijn vaak gemeen, maar je kunt ze ontmaskeren door op deze dingen te letten:
+                </p>
+                <div class="space-y-4">
+                    <div class="info-card bg-white p-5 rounded-xl shadow-md zoomable-block">
+                        <h4 class="font-bold text-indigo-600 flex items-center"><span class="text-2xl mr-2">📧</span> De Afzender:</h4>
+                        <p class="text-slate-600">Check altijd het e-mailadres! Een echt bedrijf zoals Rabobank mailt vanaf <span class="example-highlight">'@rabobank.nl'</span>, niet van <span class="example-highlight">'rabobankveilig.nl'</span>! Twijfel je? Antwoord dan niet en klik niet op links! 🙅‍♂️</p>
+                    </div>
+                    <div class="info-card bg-white p-5 rounded-xl shadow-md zoomable-block">
+                        <h4 class="font-bold text-indigo-600 flex items-center"><span class="text-2xl mr-2">🔗</span> De Link:</h4>
+                        <p class="text-slate-600">Phishingmails hebben altijd een link. Kijk goed naar de link: hij moet van het échte bedrijf zijn, dus <span class="example-highlight">'bol.com'</span> en niet <span class="example-highlight">'bol.veilig.com'</span>! Let op het adres vóór de eerste slash (/). Op je mobiel kun je de link controleren door je vinger langer op de URL te houden. 🔍</p>
+                        <div class="w-full flex justify-center mt-4">
+                            <img src="url.png" alt="Afbeelding van correcte en incorrecte website URL's (www.bol.com vs. www.bol.veilig.com, etc.)" class="rounded-lg shadow-lg max-w-full h-auto">
+                        </div>
+                        <p class="text-sm text-slate-700 mt-2">
+                            **HTTPS:** Zie je HTTPS in de link? De 'S' staat voor 'Secure' (veilig)! Maar pas op, slimme hackers gebruiken tegenwoordig ook HTTPS, dus blijf altijd alert! ⚠️
+                        </p>
+                    </div>
+                    <div class="info-card bg-white p-5 rounded-xl shadow-md zoomable-block">
+                        <h4 class="font-bold text-indigo-600 flex items-center"><span class="text-2xl mr-2">⏰</span> De Urgentie:</h4>
+                        <p class="text-slate-600">Phishingmails willen je snel laten klikken door je een gevoel van haast te geven. Ze zeggen dat er iets mis is met je account, een openstaande betaling of een belangrijk bericht. En dan staat er een link bij om het 'probleem' meteen op te lossen. 😱💨</p>
+                    </div>
+                </div>
+                
+                <p class="text-xl md:text-2xl font-bold text-red-600 mb-8 mt-8 text-center zoomable-block" id="phishing-important-note">
+                    **Belangrijk:** "Klik **NOOIT** op die links! Ga altijd zelf naar de website of gebruik de officiële app. 🛑"
+                </p>
+                <p class="text-lg text-slate-700 mb-6 zoomable-block" id="phishing-example-scenario">
+                    **Voorbeeldscenario:** "Je krijgt een e-mail dat iemand op je Facebook-account is ingelogd. Wat doe je? Klik nooit op de link in een mogelijke phishingmail, maar navigeer zelf naar de website via de URL die je kent. Verander vervolgens daar je wachtwoord. 🔑🔄"
+                </p>
+                <p class="text-lg text-slate-700 zoomable-block" id="phishing-known-contact">
+                    "Ook als een mail van een bekende komt met <span class="example-highlight">'Dit is echt iets voor jou!'</span> en een link, wees dan voorzichtig. Het kan zijn dat de bekende een virus heeft of gehackt is. 👻"
+                </p>
+            </div>
+        </section>
+
+        <!-- Privacy Sectie (Gerelateerd aan Dia 12: 'Vul nooit je gegevens in') -->
+        <section id="privacy" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-green-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Jouw Superhelden-Privacy! 🔐</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    "Vul nooit je gegevens in en gebruik niet de link in de mail die je niet vertrouwt! Ga altijd zelf naar de website." 🤫
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="info-card bg-red-100 p-8 rounded-2xl shadow-lg zoomable-block">
+                        <h3 class="text-3xl font-bold text-red-800 mb-4 flex items-center"><span class="text-4xl mr-3">❌</span> Wat je NIET moet delen</h3>
+                        <ul class="list-disc list-inside space-y-2 text-red-900 text-lg">
+                            <li>Je echte, volledige naam 📛</li>
+                            <li>Je adres of waar je woont 🏠</li>
+                            <li>Je telefoonnummer 📞</li>
+                            <li>De naam van je school 🏫</li>
+                        </ul>
+                    </div>
+                    <div class="info-card bg-green-100 p-8 rounded-2xl shadow-lg zoomable-block">
+                        <h3 class="text-3xl font-bold text-green-800 mb-4 flex items-center"><span class="text-4xl mr-3">✅</span> Wat je WEL kunt doen</h3>
+                        <ul class="list-disc list-inside space-y-2 text-green-900 text-lg">
+                            <li>Vraag je ouders je privacy-instellingen te checken 🧑‍🤝‍🧑</li>
+                            <li>Denk na voor je iets online zet ("Blurrrr it out!") 🧠</li>
+                            <li>Gebruik een bijnaam (nickname) in games 🎮</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Online Vrienden & Cyberpesten Sectie (Gerelateerd aan Dia 11 scenario) -->
+        <section id="vrienden" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-blue-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Online Vrienden & Cyberpesten: Wees Lief!💖</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    Online met vrienden zijn is superleuk, maar je moet ook weten wat je moet doen als het minder leuk wordt. Wees altijd aardig! 😊
+                </p>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg zoomable-block" id="what-is-cyberpesten-block">
+                        <button class="toggle-btn w-full" data-toggle="what-is-cyberpesten"><span class="text-xl font-bold">Wat is cyberpesten?🤔</span><span class="toggle-icon text-2xl">+</span></button>
+                        <div id="what-is-cyberpesten" class="toggle-content text-slate-700 text-lg">
+                            <p class="mb-2">Cyberpesten is wanneer iemand online (via social media, games, chatgroepen) gemene dingen zegt of doet tegen jou of iemand anders. Denk aan roddels verspreiden, gemene foto's posten, of iemand buitensluiten online. 👿</p>
+                            <p>Het is belangrijk om te weten dat dit NOOIT jouw schuld is. 🙅‍♀️</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg zoomable-block" id="wat-te-doen-block">
+                        <button class="toggle-btn w-full" data-toggle="wat-te-doen"><span class="text-xl font-bold">Wat doe je als het gebeurt? 🦸</span><span class="toggle-icon text-2xl">+</span></button>
+                        <div id="wat-te-doen" class="toggle-content text-slate-700 text-lg">
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>Wees een Sigma:</strong> Praat erover met een volwassene die je vertrouwt (ouders, leraar). Hulp vragen is sterk! 💬🧑‍🤝‍🧑</li>
+                                <li><strong>Bewaar bewijs:</strong> Maak screenshots van gemene berichten. 📸</li>
+                                <li><strong>Blokkeer en rapporteer:</strong> Blokkeer de pester en meld het bij de app of website. 🚫📢</li>
+                                <li><strong>Reageer niet:</strong> Ga niet in discussie met de pester. Dat maakt het vaak erger. 🤫</li>
+                            </ul>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-lg zoomable-block" id="scenario-block">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center"><span class="text-3xl mr-2">scenario</span> Scenario: Nieuwe Vriend Online? 🤔</h3>
+                        <p class="mb-4 text-slate-700">Je krijgt een vriendschapsverzoek in je favoriete game van iemand die je niet kent. Wat doe je? 🎮</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="scenario-accept" class="bg-green-200 text-green-800 py-3 px-6 rounded-lg font-semibold flex-1 hover:bg-green-300">Accepteren! ✅</button>
+                            <button id="scenario-ignore" class="bg-red-200 text-red-800 py-3 px-6 rounded-lg font-semibold flex-1 hover:bg-red-300">Negeren en blokkeren! ❌</button>
+                        </div>
+                        <div id="scenario-feedback" class="mt-4 p-4 rounded-lg text-left hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gevaren Online Sectie (Gerelateerd aan Dia 11: virus/gehackt) -->
+        <section id="gevaren" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-yellow-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Gevaren Online: Virussen & Malware! 💀🦠</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    "Het kan zijn dat de bekende een virus heeft of gehackt is." 💻🤒
+                    <br>Soms verstoppen boeven slechte software (virussen of malware) in bestanden of links. Dit kan je computer ziek maken!
+                </p>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="zoomable-block" id="viruses-what-they-do">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center text-indigo-700">
+                            <span class="text-3xl mr-2">👾</span> Wat Doen Virussen?
+                        </h3>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700 text-lg">
+                            <li>Ze kunnen je computer langzaam maken. 🐌</li>
+                            <li>Ze kunnen je gegevens stelen (zoals wachtwoorden!). 🕵️‍♀️</li>
+                            <li>Ze kunnen je bestanden beschadigen of blokkeren (ransomware!). 🔒💥</li>
+                        </ul>
+                    </div>
+                    <div class="zoomable-block" id="how-to-protect-chart-block">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center text-indigo-700">
+                            <span class="text-3xl mr-2">🛡️</span> Hoe Bescherm Je Je?
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="riskChart"></canvas>
+                        </div>
+                        <p class="text-sm text-center text-gray-600 mt-2">Hoe hoger de balk, hoe groter het risico. Bescherm jezelf door slimme keuzes te maken! ✨</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slimme Tools Sectie (Dia 10 uit Word) -->
+        <section id="slimme_tools" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-lime-50">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Slimme Tools & Tricks! 💡</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    Als superheld ken je alle handige trucs om veilig te blijven. Hier zijn er nog een paar! 🕵️‍♂️
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="info-card bg-white p-6 rounded-2xl shadow-lg zoomable-block">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center"><span class="text-4xl mr-3">🔒</span> HTTP vs. HTTPS: Het Slotje!</h3>
+                        <p class="mb-4 text-slate-700">
+                            "Zie je HTTPS in de link? De 'S' staat voor 'Secure' (veilig)! Maar pas op, slimme hackers gebruiken tegenwoordig ook HTTPS, dus blijf alert! ⚠️"
+                        </p>
+                    </div>
+                    <div class="info-card bg-white p-6 rounded-2xl shadow-lg zoomable-block">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center"><span class="text-4xl mr-3">🔗</span> De Link Checker!</h3>
+                        <p class="mb-4 text-slate-700">
+                            "Op je mobiel kun je de link controleren door je vinger langer op de URL of knop te houden. Dan zie je de hele link!👆🧐"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hulp Sectie (Gerelateerd aan Dia 12) -->
+        <section id="hulp" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-sky-50">
+            <div class="w-full max-w-5xl text-center">
+                <h2 class="text-5xl md:text-6xl font-black mb-2 text-slate-800">Je Bent Niet Alleen! 🤝</h2>
+                <p class="text-lg text-slate-600 mb-12">
+                    Zelfs superhelden hebben soms hulp nodig. Dat is niet zwak, dat is juist super slim! 🧠💡
+                </p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="info-card bg-white p-8 rounded-2xl shadow-lg zoomable-block">
+                        <div class="text-5xl mb-4">💬</div>
+                        <h3 class="text-2xl font-bold text-indigo-700">Praat Erover</h3>
+                        <p class="mt-2 text-slate-600">Zie je iets geks of krijg je een naar bericht? Vertel het ALTIJD aan een volwassene die je vertrouwt. 🗣️🧑‍🤝‍🧑</p>
+                    </div>
+                    <div class="info-card bg-white p-8 rounded-2xl shadow-lg zoomable-block">
+                        <div class="text-5xl mb-4">📢</div>
+                        <h3 class="text-2xl font-bold text-indigo-700">Meld Het</h3>
+                        <p class="mt-2 text-slate-600">Zie je gemeen gedrag of een foute post? Gebruik de 'Meld' of 'Report' knop. 🚨</p>
+                    </div>
+                    <div class="info-card bg-white p-8 rounded-2xl shadow-lg zoomable-block">
+                        <div class="text-5xl mb-4">🚫</div>
+                        <h3 class="text-2xl font-bold text-indigo-700">Blokkeer</h3>
+                        <p class="mt-2 text-slate-600">Valt iemand je lastig? Klik op 'Blokkeren' of 'Block'. Probleem opgelost! 🙅‍♂️</p>
+                    </div>
+                </div>
+                <p class="text-xl md:text-2xl font-semibold text-red-600 mt-12 text-center zoomable-block" id="hulp-summary">
+                    "Toch geklikt en gegevens ingevuld? Verander dan direct je wachtwoord. ⚡🔐"
+                </p>
+            </div>
+        </section>
+
+        <!-- Quiz Start Sectie (Deel van Dia 12 & 13 uit Word) -->
+        <section id="quiz-start" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-teal-50">
+            <div class="w-full max-w-3xl">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-2 text-slate-800">Test Je Superkrachten! 🏆</h2>
+                <p class="text-center text-lg text-slate-600 mb-12">
+                    "Jullie zijn nu allemaal superhelden van het internet! Door deze tips te volgen, bescherm je jezelf en je gegevens online. Gefeliciteerd! 🥳🌍"
+                    <br><br>
+                    Laten we kijken of je nu een echte Superheld van het Internet bent. Beantwoord de 10 vragen en ontdek het! 🧠✨
+                </p>
+
+                <div id="quiz-area" class="bg-white p-6 rounded-2xl shadow-lg text-center zoomable-block">
+                    <div id="quiz-question-number" class="text-lg text-gray-600 mb-4"></div>
+                    <div id="quiz-question-text" class="text-2xl font-semibold text-slate-800 mb-6"></div>
+                    <div id="quiz-options-container" class="flex flex-col gap-3 mb-6"></div>
+                    <div id="quiz-rationale-display" class="quiz-rationale hidden"></div>
+                    <button id="quiz-next-button" class="bg-indigo-600 text-white py-3 px-8 rounded-lg font-bold mt-6 hidden">Volgende Vraag</button>
+                    <button id="quiz-restart-button" class="bg-teal-600 text-white py-3 px-8 rounded-lg font-bold mt-6 hidden">Opnieuw Beginnen</button>
+                    <div id="quiz-final-score" class="text-3xl font-bold text-green-700 mt-8 hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vragenronde Sectie (Deel van Dia 13 uit Word) -->
+        <section id="vragenronde" class="min-h-screen flex flex-col items-center justify-center p-6 md:p-12 bg-fuchsia-50">
+            <div class="w-full max-w-3xl text-center">
+                <h2 class="text-5xl md:text-6xl font-black text-center mb-6 text-slate-800">Vragenronde! ❓💡</h2>
+                <p class="text-xl md:text-2xl text-slate-600 mb-8">
+                    "Hebben jullie nog vragen over wachtwoorden, tweestapsverificatie of phishing? Ik beantwoord ze graag! 🙋‍♀️🙋‍♂️"
+                </p>
+                <div class="w-full flex justify-center mt-4 mb-8">
+                    <img src="https://placehold.co/400x250/4ade80/ffffff?text=Vragen%3F" alt="Afbeelding met een vraagteken" class="rounded-lg shadow-lg max-w-full h-auto">
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-lg text-left space-y-6 zoomable-block" id="vragenronde-links-block">
+                    <div>
+                        <h3 class="text-2xl font-bold text-purple-700 mb-3 flex items-center">
+                            🎉 Leuke en leerzame link om samen te ontdekken!
+                        </h3>
+                        <p class="text-lg text-slate-700 mb-2">
+                            Wil je samen met je opa, oma, papa, mama of andere familieleden iets interessants doen? Bekijk dan deze website:
+                        </p>
+                        <a href="https://arda.nl/demo/senioren/senioren.html" target="_blank" class="text-blue-600 hover:underline text-lg font-semibold flex items-center">
+                            <span class="text-3xl mr-2">👉</span> https://arda.nl/demo/senioren/senioren.html
+                        </a>
+                        <p class="text-sm text-gray-600 mt-2">
+                            Op deze site vind je eenvoudige uitleg over digitale onderwerpen, speciaal gemaakt voor volwassenen en senioren. Het is een initiatief van het Ministerie van Economische Zaken, het Nationaal Cyber Security Centrum (Ministerie van Justitie en Veiligheid), en het Platform voor InformatieSamenleving. Ook veel andere organisaties uit de overheid en het bedrijfsleven hebben eraan meegewerkt.
+                        </p>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-3 flex items-center">
+                            🔐 Veilig internetten
+                        </h3>
+                        <p class="text-lg text-slate-700 mb-2">
+                            Wil je meer leren over veilig online zijn? Kijk dan op:
+                        </p>
+                        <a href="https://veiliginternetten.nl" target="_blank" class="text-blue-600 hover:underline text-lg font-semibold flex items-center">
+                            <span class="text-3xl mr-2">👉</span> https://veiliginternetten.nl
+                        </a>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-3 flex items-center">
+                            🔑 Test je wachtwoord
+                        </h3>
+                        <p class="text-lg text-slate-700 mb-2">
+                            Hoe sterk is jouw wachtwoord? Doe de test:
+                        </p>
+                        <a href="https://veiliginternetten.nl/wachtwoordkraaktest/" target="_blank" class="text-blue-600 hover:underline text-lg font-semibold flex items-center">
+                            <span class="text-3xl mr-2">👉</span> https://veiliginternetten.nl/wachtwoordkraaktest/
+                        </a>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-3 flex items-center">
+                            🎣 Een voorbeeld van Phishing herkennen
+                        </h3>
+                        <p class="text-lg text-slate-700 mb-2">
+                            Download hier een handige checklist om phishing te herkennen:
+                        </p>
+                        <a href="phishingherkennen_checklist_a4.pdf" target="_blank" class="text-blue-600 hover:underline text-lg font-semibold flex items-center">
+                            <span class="text-3xl mr-2">📄</span> Phishing Herkennen Checklist (PDF)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Overlay element -->
+    <div class="overlay" id="overlay"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            const zoomableBlocks = document.querySelectorAll('.zoomable-block'); // Selecteer alle zoomable blokken
+            const overlay = document.getElementById('overlay');
+            let currentZoomedBlock = null;
+
+            // Observer voor het activeren van navigatielinks bij scrollen
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active', 'bg-indigo-600', 'text-white');
+                            link.classList.add('bg-gray-200'); // Standaard achtergrondkleur
+                            if (link.dataset.section === entry.target.id) {
+                                link.classList.add('active', 'bg-indigo-600', 'text-white'); // Actieve stijl
+                                link.classList.remove('bg-gray-200'); // Verwijder standaard achtergrond
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-40% 0px -60% 0px' }); // Pas rootMargin aan voor betere detectie
+
+            sections.forEach(section => { observer.observe(section); });
+
+            // Scroll naar sectie bij klik op navigatielink
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            // Wachtwoordsterkte Checker Logica
+            const passwordInput = document.getElementById('password-input');
+            const strengthBar = document.getElementById('strength-bar');
+            const strengthText = document.getElementById('strength-text');
+            const crackTime = document.getElementById('crack-time');
+
+            function checkPasswordStrength() {
+                const password = passwordInput.value;
+                let score = 0;
+                let time = "...";
+                let color = "bg-gray-300"; // Standaard kleur
+
+                if (password.length > 0) {
+                    score += password.length * 2; // Lengte is belangrijk
+                    if (password.match(/[a-z]/)) score += 5; // Kleine letters
+                    if (password.match(/[A-Z]/)) score += 10; // Hoofdletters
+                    if (password.match(/[0-9]/)) score += 10; // Cijfers
+                    if (password.match(/[^a-zA-Z0-9]/)) score += 15; // Speciale tekens
+
+                    score = Math.max(0, Math.min(100, score)); // Houd score tussen 0 en 100
+
+                    // Bepaal sterkte en kraaktijd op basis van lengte en complexiteit
+                    if (password.length < 8) {
+                        time = "Minder dan 1 seconde 💨";
+                        color = "bg-red-500";
+                        strengthText.textContent = "Zwak 🙈";
+                    } else if (password.length < 12) {
+                        time = "Enkele minuten tot dagen ⏰";
+                        color = "bg-orange-500";
+                        strengthText.textContent = "Redelijk 🤔";
+                    } else if (score < 75) { // Iets minder streng voor "goed"
+                        time = "Maanden tot jaren ⏳";
+                        color = "bg-yellow-500";
+                        strengthText.textContent = "Goed 👍";
+                    } else {
+                        time = "Eeuwen! 🚀";
+                        color = "bg-green-500";
+                        strengthText.textContent = "Supersterk! 💪";
+                    }
+                } else {
+                    strengthText.textContent = "Begin met typen! ⌨️";
+                    color = "bg-gray-300";
+                    time = "...";
+                }
+
+                strengthBar.style.width = `${score}%`;
+                strengthBar.className = `password-strength-bar ${color}`; // Werk kleur bij
+                crackTime.textContent = time;
+            }
+
+            if (passwordInput) {
+                passwordInput.addEventListener('input', checkPasswordStrength);
+                checkPasswordStrength(); // Initieel checken bij laden
+            }
+
+            // Phishing Hotspot Logica (aangepast voor zoom)
+            const phishingContainer = document.getElementById('phishing-container');
+            if (phishingContainer) {
+                phishingContainer.querySelectorAll('.phishing-hotspot').forEach(hotspot => {
+                    const infoBox = document.getElementById(`${hotspot.id}-info`);
+                    if (infoBox) {
+                        hotspot.addEventListener('click', (e) => {
+                            e.stopPropagation(); // Voorkom dat de klik doorsijpelt
+
+                            // Sluit eerst andere open en gezoomde info boxes
+                            document.querySelectorAll('.hotspot-info').forEach(box => {
+                                if (box !== infoBox) {
+                                    box.classList.remove('visible', 'zoomed');
+                                }
+                            });
+                            
+                            // Toggle zichtbaarheid en zoom van de geklikte info box
+                            if (infoBox.classList.contains('zoomed')) {
+                                // Indien al gezoomd, unzoom
+                                infoBox.classList.remove('zoomed', 'visible');
+                                overlay.classList.remove('visible');
+                                currentZoomedBlock = null;
+                                document.body.style.overflow = 'auto';
+                            } else {
+                                // Zoom de info box
+                                infoBox.classList.add('visible', 'zoomed');
+                                overlay.classList.add('visible');
+                                currentZoomedBlock = infoBox; // Stel de gezoomde info box in als huidige gezoomde block
+                                document.body.style.overflow = 'hidden';
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Toggle Knoppen Logica (voor uitleg over cyberpesten)
+            document.querySelectorAll('.toggle-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Voorkom dat de klik het parent zoomable-block triggert
+                    const targetId = button.dataset.toggle;
+                    const targetContent = document.getElementById(targetId);
+                    const icon = button.querySelector('.toggle-icon'); // Het +/- icoon
+
+                    if (targetContent) {
+                        targetContent.classList.toggle('open');
+                        if (targetContent.classList.contains('open')) {
+                            targetContent.style.maxHeight = targetContent.scrollHeight + "px"; // Hoogte aanpassen
+                            icon.textContent = '-'; // Icoon naar min
+                        } else {
+                            targetContent.style.maxHeight = '0'; // Hoogte nul
+                            icon.textContent = '+'; // Icoon naar plus
+                        }
+                    }
+                });
+            });
+
+            // Scenario Knoppen Logica (nieuwe vriend online)
+            const scenarioAcceptBtn = document.getElementById('scenario-accept');
+            const scenarioIgnoreBtn = document.getElementById('scenario-ignore');
+            const scenarioFeedback = document.getElementById('scenario-feedback');
+
+            if (scenarioAcceptBtn) {
+                scenarioAcceptBtn.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Voorkom dat de klik het parent zoomable-block triggert
+                    scenarioFeedback.classList.remove('hidden', 'bg-green-100');
+                    scenarioFeedback.classList.add('bg-red-100');
+                    scenarioFeedback.innerHTML = '<p class="font-bold text-red-800">❌ Oei, dat is Riskant!</p><p class="text-sm text-red-700">Mensen die je alleen online kent, zijn niet altijd wie ze zeggen dat ze zijn. Het is beter om voorzichtig te zijn. ⚠️</p>';
+                });
+            }
+            if (scenarioIgnoreBtn) {
+                scenarioIgnoreBtn.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Voorkom dat de klik het parent zoomable-block triggert
+                    scenarioFeedback.classList.remove('hidden', 'bg-red-100');
+                    scenarioFeedback.classList.add('bg-green-100');
+                    scenarioFeedback.innerHTML = '<p class="font-bold text-green-800">✅ Superhelden Keuze!</p><p class="text-sm text-green-700">Heel goed! Accepteer geen vriendschapsverzoeken van mensen die je niet in het echt kent. Blijf veilig! 🛡️</p>';
+                });
+            }
+
+            // Chart.js Grafiek voor Risiconiveaus
+            const riskChartCtx = document.getElementById('riskChart');
+            if (riskChartCtx) {
+                new Chart(riskChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [['Onbekende', 'bestanden', 'openen'], 'Geen virusscanner', ['Op foute', 'links klikken'], ['Hulp vragen', 'aan ouders']],
+                        datasets: [{
+                            label: 'Risiconiveau',
+                            data: [80, 70, 90, 10], // Data voor de balken
+                            backgroundColor: [ // Kleuren van de balken
+                                'rgba(239, 68, 68, 0.8)',   // Rood voor hoog risico
+                                'rgba(245, 158, 11, 0.8)',  // Oranje voor gemiddeld risico
+                                'rgba(239, 68, 68, 0.9)',   // Donkerder rood voor zeer hoog risico
+                                'rgba(52, 211, 153, 0.8)'   // Groen voor laag risico (hulp vragen)
+                            ],
+                            borderColor: [ // Randkleuren
+                                'rgba(239, 68, 68, 1)',
+                                'rgba(245, 158, 11, 1)',
+                                'rgba(239, 68, 68, 1)',
+                                'rgba(52, 211, 153, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false // Geen legenda nodig
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        const item = tooltipItems[0];
+                                        let label = item.chart.data.labels[item.dataIndex];
+                                        return Array.isArray(label) ? label.join(' ') : label; // Combineer labels als het een array is
+                                    },
+                                    label: function(context) {
+                                        return 'Risico: ' + context.raw + '%'; // Toon percentage in tooltip
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100, // Maximale waarde op de Y-as
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%'; // Toon percentage op Y-as
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Quiz Logica
+            const quizData = {
+              "questions": [
+                {"question": "Welk van de volgende wachtwoorden is het moeilijkst te kraken voor een hacker?", "rationale": "Lengte is de grootste superkracht! Een lange zin van willekeurige woorden is veel moeilijker te raden dan een kort, complex wachtwoord. 📏🔒", "answerOptions": [{"text": "Skibidi.Toilet.Gek.Huis.2024", "isCorrect": true}, {"text": "blurrr#2024", "isCorrect": false}, {"text": "SigmaMale!", "isCorrect": false}, {"text": "12345ABC", "isCorrect": false}]},
+                {"question": "Je stelt tweestapsverificatie (2FA) in voor je e-mailaccount. Wat is het belangrijkste voordeel hiervan?", "rationale": "Met 2FA heb je een extra slot op je account, waardoor hackers, zelfs als ze je wachtwoord hebben, de tweede stap missen en niet kunnen inloggen. 🛡️", "answerOptions": [{"text": "Je hoeft je wachtwoord nooit meer te veranderen.", "isCorrect": false}, {"text": "Een hacker met jouw wachtwoord kan nog steeds niet inloggen zonder de tweede stap.", "isCorrect": true}, {"text": "Je computer wordt sneller.", "isCorrect": false}, {"text": "Je krijgt minder spam.", "isCorrect": false}]},
+                {"question": "Je ontvangt een mailtje van je bank dat je NU je wachtwoord moet veranderen via een link. Wat doe je?", "rationale": "Klik nooit op een link in een onverwacht bericht, ook al lijkt het dringend. Ga altijd zelf naar de officiële website om in te loggen. 🛑", "answerOptions": [{"text": "Meteen klikken, want het is van de bank.", "isCorrect": false}, {"text": "De mail negeren en zelf naar de website van de bank gaan.", "isCorrect": true}, {"text": "De mail beantwoorden en vragen of het echt is.", "isCorrect": false}, {"text": "De link kopiëren en in een nieuwe incognito browser plakken.", "isCorrect": false}]},
+                {"question": "Waarom is het hergebruiken van wachtwoorden voor verschillende websites zo riskant?", "rationale": "Als één account wordt gehackt, kunnen cybercriminelen die inloggegevens gebruiken om toegang te krijgen tot al je andere accounts die hetzelfde wachtwoord gebruiken, wat een domino-effect veroorzaakt. 💥", "answerOptions": [{"text": "Je vergeet ze dan sneller.", "isCorrect": false}, {"text": "Als één website gehackt wordt, kunnen ze overal inloggen.", "isCorrect": true}, {"text": "Websites blokkeren je account dan.", "isCorrect": false}, {"text": "Het maakt je internetverbinding trager.", "isCorrect": false}]},
+                {"question": "Wat is een duidelijk teken van 'urgentie' in een phishing-mail of -bericht?", "rationale": "Oplichters creëren vaak een gevoel van haast en dreiging (bijv. 'binnen 24 uur geblokkeerd') om je te dwingen snel en ondoordacht op een link te klikken. ⏰🚨", "answerOptions": [{"text": "Een aanbieding voor een gratis product.", "isCorrect": false}, {"text": "Een dreigement dat je account binnen korte tijd wordt geblokkeerd.", "isCorrect": true}, {"text": "Een vraag om je mening over een product.", "isCorrect": false}, {"text": "Een nieuwsbrief met de laatste updates.", "isCorrect": false}]},
+                {"question": "Wat moet je ABSOLUUT NIET online delen met mensen die je alleen online kent?", "rationale": "Het delen van persoonlijke gegevens zoals je huisadres kan gevaarlijk zijn, omdat het vreemden in staat stelt om te weten waar je woont en je offline te benaderen. 🚫🏠", "answerOptions": [{"text": "Je gamertag of bijnaam.", "isCorrect": false}, {"text": "Een foto van je huisdier.", "isCorrect": false}, {"text": "Je echte huisadres.", "isCorrect": true}, {"text": "Je favoriete Skibidi Toilet episode.", "isCorrect": false}]},
+                {"question": "Je krijgt een bericht van 'pap' met een nieuw nummer die direct om geld vraagt. Wat is de veiligste eerste stap?", "rationale": "Contact opnemen via het bekende, oude nummer is de meest betrouwbare manier om te verifiëren of het bericht echt van je ouder komt, voordat je enige actie onderneemt. 📞", "answerOptions": [{"text": "Meteen het geld overmaken.", "isCorrect": false}, {"text": "Terugsturen via het nieuwe nummer om te vragen wie het is.", "isCorrect": false}, {"text": "Je ouder bellen op het OUDE, bekende nummer om te checken.", "isCorrect": true}, {"text": "Het bericht negeren en niks doen.", "isCorrect": false}]},
+                {"question": "Wat is de belangrijkste regel voor een 'Sigma Male' of 'Sigma Female' als het gaat om cyberpesten?", "rationale": "Hulp vragen aan een volwassene is de meest krachtige en effectieve manier om met cyberpesten om te gaan, omdat zij de middelen en kennis hebben om de situatie veilig aan te pakken. 🗣️🧑‍🤝‍🧑", "answerOptions": [{"text": "Meteen terugpesten.", "isCorrect": false}, {"text": "Niks doen en hopen dat het weggaat.", "isCorrect": false}, {"text": "Het aan een volwassene vertellen.", "isCorrect": true}, {"text": "Al je accounts verwijderen.", "isCorrect": false}]},
+                {"question": "Je ziet een link die begint met `HTTP://` (zonder de 'S'). Waarom is dit een waarschuwing?", "rationale": "De 'S' in HTTPS staat voor 'Secure', wat betekent dat de verbinding tussen jou en de website versleuteld is. Zonder HTTPS is de communicatie onversleuteld en makkelijker af te luisteren door hackers. ⚠️", "answerOptions": [{"text": "De website is oud.", "isCorrect": false}, {"text": "De website is niet veilig en je gegevens kunnen worden afgeluisterd.", "isCorrect": true}, {"text": "De website laadt trager.", "isCorrect": false}, {"text": "De website is niet populair.", "isCorrect": false}]},
+                {"question": "Wat is de beste 'Superkracht' om altijd te gebruiken als je online bent?", "rationale": "Nadenken voordat je klikt, deelt of reageert, is de allerbelangrijkste gewoonte om jezelf online te beschermen. Dit voorkomt de meeste problemen voordat ze beginnen. 🧠💡", "answerOptions": [{"text": "Alles delen met je online vrienden.", "isCorrect": false}, {"text": "Alleen maar op links klikken die er cool uitzien.", "isCorrect": false}, {"text": "Nadenken voordat je klikt, deelt of reageert ('Blurrrr it out!').", "isCorrect": true}, {"text": "Je wachtwoord op een briefje schrijven.", "isCorrect": false}]}
+              ]
+            };
+
+            const quizQuestionNumber = document.getElementById('quiz-question-number');
+            const quizQuestionText = document.getElementById('quiz-question-text');
+            const quizOptionsContainer = document.getElementById('quiz-options-container');
+            const quizRationaleDisplay = document.getElementById('quiz-rationale-display');
+            const quizNextButton = document.getElementById('quiz-next-button');
+            const quizRestartButton = document.getElementById('quiz-restart-button');
+            const quizFinalScore = document.getElementById('quiz-final-score');
+            let currentQuizQuestionIndex = 0;
+            let quizScore = 0;
+            let quizHasAnswered = false;
+
+            // Functie om array te shufflen (voor quizvragen)
+            function shuffleQuizArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            // Functie om de quizvraag te laden
+            function loadQuizQuestion() {
+                quizHasAnswered = false; // Reset antwoordstatus
+                quizRationaleDisplay.classList.add('hidden'); // Verberg uitleg
+                quizNextButton.classList.add('hidden'); // Verberg volgende knop
+                quizRestartButton.classList.add('hidden'); // Verberg herstart knop
+                quizFinalScore.classList.add('hidden'); // Verberg eindscore
+
+                if (currentQuizQuestionIndex < quizData.questions.length) {
+                    const currentQuestion = quizData.questions[currentQuizQuestionIndex];
+                    quizQuestionNumber.textContent = `Vraag ${currentQuizQuestionIndex + 1} van ${quizData.questions.length}`;
+                    quizQuestionText.textContent = currentQuestion.question;
+                    quizOptionsContainer.innerHTML = ''; // Leeg opties
+                    const shuffledOptions = [...currentQuestion.answerOptions];
+                    shuffleQuizArray(shuffledOptions); // Schud antwoordopties
+
+                    shuffledOptions.forEach(option => {
+                        const button = document.createElement('button');
+                        button.classList.add('quiz-option');
+                        button.textContent = option.text;
+                        button.onclick = () => selectQuizAnswer(option, button, currentQuestion.rationale);
+                        quizOptionsContainer.appendChild(button);
+                    });
+                } else {
+                    showQuizResults(); // Toon resultaten als quiz af is
+                }
+            }
+
+            // Functie voor het selecteren van een antwoord
+            function selectQuizAnswer(selectedOption, clickedButton, rationale) {
+                if (quizHasAnswered) return; // Voorkom dubbele antwoorden
+                quizHasAnswered = true;
+                quizNextButton.classList.remove('hidden'); // Toon volgende knop
+
+                // Schakel alle knoppen uit en markeer geselecteerde
+                Array.from(quizOptionsContainer.children).forEach(button => {
+                    button.disabled = true;
+                    if (button === clickedButton) {
+                        button.classList.add('selected');
+                    }
+                });
+
+                quizRationaleDisplay.textContent = rationale;
+                quizRationaleDisplay.classList.remove('hidden'); // Toon uitleg
+
+                if (selectedOption.isCorrect) {
+                    quizScore++; // Verhoog score bij correct antwoord
+                    clickedButton.classList.add('correct');
+                } else {
+                    clickedButton.classList.add('incorrect');
+                    // Markeer het correcte antwoord ook
+                    const correctOption = quizData.questions[currentQuizQuestionIndex].answerOptions.find(opt => opt.isCorrect);
+                    const correctButton = Array.from(quizOptionsContainer.children).find(btn => btn.textContent === correctOption.text);
+                    if(correctButton) correctButton.classList.add('correct');
+                }
+            }
+
+            // Functie voor volgende quizvraag
+            function nextQuizQuestion() {
+                currentQuizQuestionIndex++;
+                loadQuizQuestion();
+            }
+
+            // Functie voor het tonen van quizresultaten
+            function showQuizResults() {
+                quizQuestionNumber.textContent = 'Quiz Voltooid! 🎉';
+                quizQuestionText.textContent = 'Je hebt de quiz afgerond! Hier is je score:';
+                quizOptionsContainer.innerHTML = '';
+                quizRationaleDisplay.classList.add('hidden');
+                quizNextButton.classList.add('hidden');
+                quizFinalScore.classList.add('hidden');
+                quizRestartButton.classList.remove('hidden'); // Toon herstart knop
+            }
+
+            // Functie voor het herstarten van de quiz
+            function resetQuiz() {
+                currentQuizQuestionIndex = 0;
+                quizScore = 0;
+                loadQuizQuestion();
+            }
+
+            // Event listeners voor quizknoppen
+            if (quizNextButton) quizNextButton.addEventListener('click', nextQuizQuestion);
+            if (quizRestartButton) quizRestartButton.addEventListener('click', resetQuiz);
+
+            // Laad de eerste quizvraag bij start
+            loadQuizQuestion();
+
+            // Logica voor interactieve stellingen (nu ook zoomable-block)
+            const statementInteractive1 = document.getElementById('statement-interactive-1');
+            const statementAnswer1 = document.getElementById('statement-answer-1');
+            if (statementInteractive1 && statementAnswer1) {
+                statementInteractive1.addEventListener('click', () => {
+                    // Deze click handler triggert de 'open' klasse voor de tekst,
+                    // De zoomable-block handler op de parent div zal de zoom regelen.
+                    statementAnswer1.classList.toggle('open');
+                });
+            }
+
+            const statementInteractive2 = document.getElementById('statement-interactive-2');
+            const statementAnswer2 = document.getElementById('statement-answer-2');
+            if (statementInteractive2 && statementAnswer2) {
+                statementInteractive2.addEventListener('click', () => {
+                    statementAnswer2.classList.toggle('open');
+                });
+            }
+
+            // Logica voor interactieve slechte wachtwoorden
+            const statementInteractiveBadPasswords = document.getElementById('statement-interactive-bad-passwords');
+            const statementAnswerBadPasswords = document.getElementById('statement-answer-bad-passwords');
+            if (statementInteractiveBadPasswords && statementAnswerBadPasswords) {
+                statementInteractiveBadPasswords.addEventListener('click', () => {
+                    statementAnswerBadPasswords.classList.toggle('open');
+                });
+            }
+
+            // Logica voor het tonen van afbeelding en tekst over kraaktijd
+            const bruteforceRevealArea = document.getElementById('bruteforce-reveal-area');
+            const bruteforceContent = document.getElementById('bruteforce-content');
+            const bruteforceImage = document.getElementById('bruteforce-image'); 
+
+            if (bruteforceRevealArea && bruteforceContent && bruteforceImage) {
+                bruteforceRevealArea.addEventListener('click', () => {
+                    bruteforceRevealArea.classList.add('hidden'); // Verberg de "klik om te zien" sectie
+                    bruteforceContent.classList.remove('hidden'); // Toon de afbeelding en de tekst
+                });
+
+                // Bestaande logica voor het vergroten/verkleinen van de afbeelding bij klik op de afbeelding zelf
+                bruteforceImage.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Voorkom dat de klik de parent zoomable-block triggert
+                    bruteforceImage.classList.toggle('zoomed');
+                });
+            }
+
+            // Logica voor de Gouden Regels interactie (nu ook zoomable-block)
+            document.querySelectorAll('.golden-rule-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    // Deze click handler triggert de 'active' klasse voor de tekst,
+                    // De zoomable-block handler op de card zal de zoom regelen.
+                    document.querySelectorAll('.golden-rule-card').forEach(otherCard => {
+                        if (otherCard !== card) {
+                            otherCard.classList.remove('active');
+                        }
+                    });
+                    card.classList.toggle('active');
+                });
+            });
+
+            // Zoom functionaliteit voor alle .zoomable-block elementen
+            zoomableBlocks.forEach(block => {
+                block.addEventListener('click', (event) => {
+                    // Controleer of de klik op een element binnen het zoomable block was dat al een eigen actie heeft
+                    // Zoals buttons, of interactieve afbeeldingen die al een stopPropagation hebben.
+                    if (event.target.tagName === 'BUTTON' || event.target.tagName === 'A' || event.target.classList.contains('phishing-hotspot') || event.target.classList.contains('zoomable-image') || event.target.closest('.hotspot-info')) {
+                        return; // Doe niets als het een klik op een interactief element is
+                    }
+
+                    if (block.classList.contains('zoomed')) {
+                        block.classList.remove('zoomed');
+                        overlay.classList.remove('visible');
+                        currentZoomedBlock = null;
+                        document.body.style.overflow = 'auto'; // Herstel scrollen
+                    } else {
+                        zoomableBlocks.forEach(otherBlock => {
+                            if (otherBlock !== block && otherBlock.classList.contains('zoomed')) {
+                                otherBlock.classList.remove('zoomed');
+                            }
+                        });
+                        
+                        block.classList.add('zoomed');
+                        overlay.classList.add('visible');
+                        currentZoomedBlock = block;
+                        document.body.style.overflow = 'hidden'; // Voorkom scrollen van de body
+                    }
+                });
+            });
+
+            // Sluit gezoomde block en overlay als er op de overlay geklikt wordt
+            overlay.addEventListener('click', () => {
+                if (currentZoomedBlock) {
+                    currentZoomedBlock.classList.remove('zoomed', 'visible'); // Remove visible for hotspot-info too
+                    overlay.classList.remove('visible');
+                    currentZoomedBlock = null;
+                    document.body.style.overflow = 'auto'; // Herstel scrollen
+                }
+            });
+
+            // Sluit gezoomde block en overlay als op ESC gedrukt wordt
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && currentZoomedBlock) {
+                    currentZoomedBlock.classList.remove('zoomed', 'visible'); // Remove visible for hotspot-info too
+                    overlay.classList.remove('visible');
+                    currentZoomedBlock = null;
+                    document.body.style.overflow = 'auto'; // Herstel scrollen
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+�
