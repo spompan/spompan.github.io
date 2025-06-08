@@ -12,9 +12,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; /* Zorg ervoor dat de body minimaal de viewport hoogte is */
             padding: 1rem;
-            overflow: hidden; /* Voorkom scrollen op de indexpagina */
+            /* overflow: hidden; /* Oorspronkelijk: Voorkom scrollen op de indexpagina - DEZE IS NU VERWIJDERD */
+            overflow-y: auto; /* Sta verticaal scrollen toe indien nodig */
+            -webkit-overflow-scrolling: touch; /* Voor soepeler scrollen op iOS */
         }
         .main-container {
             background-color: white;
