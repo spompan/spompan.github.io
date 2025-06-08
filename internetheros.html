@@ -320,6 +320,7 @@
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
             position: relative; /* Zorgt ervoor dat z-index werkt bij initial state */
             z-index: 1; /* Standaard z-index */
+            background-color: white; /* Standaard achtergrondkleur voor alle zoomable blocks */
         }
 
         .zoomable-block.zoomed {
@@ -335,6 +336,7 @@
             max-height: 90vh; /* Max hoogte om verticaal te passen */
             overflow-y: auto; /* Scrollen mogelijk als inhoud te groot is */
             border-radius: 1.5rem; /* Consistentie met andere kaarten */
+            background-color: white; /* Witte achtergrond wanneer gezoomd voor leesbaarheid */
         }
 
         /* Overlay stijl */
@@ -419,7 +421,7 @@
             <div class="text-center z-10">
                 <h1 class="text-6xl md:text-8xl font-black mb-4">Superhelden van het Internet – Bescherm Jezelf Online! 🦸‍♀️🦸‍♂️</h1>                
                 <div class="w-64 h-64 md:w-80 md:h-80 mx-auto mt-10 bg-indigo-400 rounded-full flex items-center justify-center shadow-xl animate-bounce-slow">
-                    <img src="helden.png" alt="Afbeelding van een superheld met een schild of slot" class="rounded-full object-cover p-4">
+                    <img src="helden.png" alt="" class="rounded-full object-cover p-4">
                 </div>
                 <br/>
                 <p class="text-xl md:text-2xl max-w-3xl mx-auto text-indigo-200">
@@ -438,7 +440,7 @@
                     "Superveel! En al die accounts moeten jullie beveiligen met een uniek en sterk wachtwoord. Maar dat doen bijna mensen niet... 😱"
                 </p>
                 <div class="w-full flex justify-center mb-8">
-                    <img src="socialmedias2.png" alt="Afbeelding van social media en streaming iconen" class="rounded-lg shadow-lg max-w-full h-auto">
+                    <img src="socialmedias2.png" alt="" class="rounded-lg shadow-lg max-w-full h-auto">
                 </div>                
             </div>
         </section>
@@ -514,7 +516,7 @@
 
                 <div id="bruteforce-content" class="hidden zoomable-block"> <!-- Add zoomable-block here -->
                     <div class="w-full flex justify-center mb-8 mt-8">
-                        <img id="bruteforce-image" src="bruteforce.png" alt="Afbeelding van brute-force kraaktijd" width="400" class="rounded-lg shadow-lg zoomable-image">
+                        <img id="bruteforce-image" src="bruteforce.png" alt="" width="400" class="rounded-lg shadow-lg zoomable-image">
                     </div>    
                     <p id="bruteforce-text-info" class="text-lg text-slate-700 text-center mb-8">
                         "Een wachtwoord van 5 tekens met cijfers, hoofdletters en kleine letters zou een hacker slechts 2 uur kosten om te kraken. Maar een wachtwoord van 18 tekens met cijfers, symbolen, hoofdletters en kleine letters zou 463 triljard jaar duren. ⏳🔒"
@@ -617,7 +619,7 @@
                 </div>
                 
                 <div class="w-full flex justify-center mb-8">
-                    <img src="passwordmanager-horizontal.png" alt="Afbeelding van een digitale kluis of wachtwoordmanager app" width="50%" class="rounded-lg shadow-lg max-w-full h-auto">
+                    <img src="passwordmanager-horizontal.png" alt="" width="50%" class="rounded-lg shadow-lg max-w-full h-auto">
                 </div>
                 <p class="text-lg text-slate-700 text-center zoomable-block" id="password-manager-summary">
                     "Denk aan een superveilige rugzak voor al je geheime codes! 🎒🔒 Populaire apps zijn Microsoft Authenticator, Authy of Google Authenticator."
@@ -672,7 +674,7 @@
                         "Ook al heeft een hacker je wachtwoord, zonder die extra code kunnen ze niet in je account! Andere namen hiervoor zijn Multi Factor Authenticatie (MFA) of 2FA. 🔒🔐"
                     </p>
                     <p class="text-xl md:text-2xl font-semibold text-teal-600">
-                        "Zet tweestapsverificatie vooral aan op je e-mailaccounts, want daarmee kun je vaak wachtwoorden resetten van andere diensten! Zorg ook dat je weet hoe je je account kunt herstellen als je je telefoon kwijtraakt, bijvoorbeeld met back-upcodes. �🆘"
+                        "Zet tweestapsverificatie vooral aan op je e-mailaccounts, want daarmee kun je vaak wachtwoorden resetten van andere diensten! Zorg ook dat je weet hoe je je account kunt herstellen als je je telefoon kwijtraakt, bijvoorbeeld met back-upcodes. 📧🆘"
                     </p>
                 </div>
             </div>
@@ -741,7 +743,7 @@
                         <h4 class="font-bold text-indigo-600 flex items-center"><span class="text-2xl mr-2">🔗</span> De Link:</h4>
                         <p class="text-slate-600">Phishingmails hebben altijd een link. Kijk goed naar de link: hij moet van het échte bedrijf zijn, dus <span class="example-highlight">'bol.com'</span> en niet <span class="example-highlight">'bol.veilig.com'</span>! Let op het adres vóór de eerste slash (/). Op je mobiel kun je de link controleren door je vinger langer op de URL te houden. 🔍</p>
                         <div class="w-full flex justify-center mt-4">
-                            <img src="url.png" alt="Afbeelding van correcte en incorrecte website URL's (www.bol.com vs. www.bol.veilig.com, etc.)" class="rounded-lg shadow-lg max-w-full h-auto">
+                            <img src="url.png" alt="" class="rounded-lg shadow-lg max-w-full h-auto">
                         </div>
                         <p class="text-sm text-slate-700 mt-2">
                             **HTTPS:** Zie je HTTPS in de link? De 'S' staat voor 'Secure' (veilig)! Maar pas op, slimme hackers gebruiken tegenwoordig ook HTTPS, dus blijf altijd alert! ⚠️
@@ -849,7 +851,7 @@
                         <ul class="list-disc list-inside space-y-2 text-slate-700 text-lg">
                             <li>Ze kunnen je computer langzaam maken. 🐌</li>
                             <li>Ze kunnen je gegevens stelen (zoals wachtwoorden!). 🕵️‍♀️</li>
-                            <li>Ze kunnen je bestanden beschadigen of blokkeren (ransomware!). 🔒💥</li>
+                            <li>Ze kunnen je bestanden beschadigen of blokkeren (ransomware!). �💥</li>
                         </ul>
                     </div>
                     <div class="zoomable-block" id="how-to-protect-chart-block">
@@ -949,7 +951,7 @@
                     "Hebben jullie nog vragen? Ik beantwoord ze graag! 🙋‍♀️🙋‍♂️"
                 </p>
                 <div class="w-full flex justify-center mt-4 mb-8">
-                    <img src="https://placehold.co/400x250/4ade80/ffffff?text=Vragen%3F" alt="Afbeelding met een vraagteken" class="rounded-lg shadow-lg max-w-full h-auto">
+                    <img src="https://placehold.co/400x250/4ade80/ffffff?text=Vragen%3F" alt="" class="rounded-lg shadow-lg max-w-full h-auto">
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-lg text-left space-y-6 zoomable-block" id="vragenronde-links-block">
