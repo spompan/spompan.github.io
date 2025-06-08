@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woordenlijst: Superhelden van het Internet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f7ff; /* Lichte achtergrondkleur */
+            color: #1e293b; /* Donkere tekstkleur */
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        h1, h2, h3 {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            color: #1e40af; /* Donkerblauw */
+        }
+        .glossary-container {
+            max-width: 1000px;
+            width: 100%;
+            background-color: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .word-card {
+            background-color: #f8fafc; /* Zeer lichtgrijze achtergrond */
+            border-radius: 1.25rem; /* Afgeronde hoeken */
+            padding: 1.5rem;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid #e2e8f0; /* Lichte rand */
+            display: flex;
+            flex-direction: column;
+        }
+        .word-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        .word-title {
+            display: flex;
+            align-items: center;
+            font-size: 2.25rem; /* Grote titel voor het woord */
+            font-weight: 900;
+            color: #4f46e5; /* Indigo kleur */
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .word-title-small {
+            display: flex;
+            align-items: center;
+            font-size: 1.90rem; /* Grote titel voor het woord */
+            font-weight: 900;
+            color: #4f46e5; /* Indigo kleur */
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .word-icon {
+            font-size: 2.5rem;
+            margin-right: 0.75rem;
+        }
+        .section-heading {
+            font-weight: bold;
+            color: #3b82f6; /* Blauw */
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .section-heading .icon {
+            font-size: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        .section-text {
+            color: #475569; /* Donkergrijs */
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .math-equation {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #3b82f6;
+            background-color: #e0f2fe;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+            margin: 0 0.2rem;
+        }
+
+        /* Responsive aanpassingen */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            .glossary-container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .word-title {
+                font-size: 1.75rem;
+            }
+            .word-icon {
+                font-size: 2rem;
+            }
+            .section-text {
+                font-size: 0.875rem;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glossary-container">
+        <h1 class="text-4xl md:text-5xl text-center mb-8">📚 Woordenlijst: Superhelden van het Internet</h1>
+        <p class="text-center text-lg text-slate-700 mb-10">
+            Hier zijn een paar 'moeilijke' woorden die we gebruiken in de presentatie. Als je deze woorden kent, ben je al een halve internet-superheld!
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Account -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">👤</span> Account</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is jouw persoonlijke plekje op een website, game of app. Denk aan je Fortnite-profiel, je TikTok-pagina of je schoolomgeving.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Hier staan al jouw gegevens, instellingen en voortgang. Je moet inloggen om erbij te kunnen.</p>
+            </div>
+
+            <!-- Brute Force Aanval -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">💥</span> Brute Force Aanval</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Een 'brute force' aanval is een speciale manier waarop hackers proberen jouw wachtwoord te raden. Ze gebruiken een supersnelle computer die heel veel verschillende wachtwoorden één voor één uitprobeert, net zolang tot jouw wachtwoord is gevonden.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Dit laat zien waarom een lang en gek wachtwoord zo belangrijk is: het duurt dan veel te lang voor zo'n computer om het te raden.</p>
+            </div>
+
+            <!-- Cyberpesten -->
+            <div class="word-card">
+                <div class="word-title-small"><span class="word-icon">👿</span> Cyberpesten</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is pesten dat online gebeurt, via apps, games of social media. Denk aan gemene berichten sturen, roddels verspreiden, of iemand expres buiten online groepen houden.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het is belangrijk om te herkennen wat cyberpesten is en te weten dat het nooit jouw schuld is. Je moet er altijd over praten met een volwassene.</p>
+            </div>
+
+            <!-- Datalek -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🚨</span> Datalek</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Een datalek is wanneer hackers ergens inbreken (bijvoorbeeld bij een website of bedrijf) en dan jouw persoonlijke informatie (zoals je wachtwoord of e-mailadres) kunnen stelen.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Dit is waarom je overal een ander wachtwoord moet hebben. Als er ergens een datalek is, kunnen hackers dan niet bij al je andere accounts.</p>
+            </div>
+
+            <!-- HTTPS -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🔒</span> HTTPS</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een veilige manier om websites te bezoeken. De 'S' staat voor 'Secure' (veilig). Het betekent dat de verbinding tussen jouw computer en de website versleuteld is.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Als je een website bezoekt die met HTTPS begint (en je ziet een slotje in de adresbalk), weet je dat de informatie die je verstuurt (zoals je wachtwoord) veilig is en niet zomaar kan worden afgeluisterd.</p>
+            </div>
+
+            <!-- Malware -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🦠</span> Malware</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een soort gemeen computerprogramma (software) dat gemaakt is om je computer of telefoon problemen te geven. Virussen zijn een soort malware.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Malware kan je computer langzaam maken, je bestanden stelen of zelfs kapotmaken. Je krijgt het vaak binnen via foute links, verdachte downloads of nep-apps.</p>
+            </div>
+
+            <!-- Nickname -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🎮</span> Nickname</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een bijnaam of een andere naam die je online gebruikt in plaats van je echte naam.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Als je een nickname gebruikt, is het moeilijker voor vreemden om je echte identiteit te achterhalen en wie je bent. Het helpt je privacy te beschermen.</p>
+            </div>
+
+            <!-- Phishing -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🎣</span> Phishing</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een truc van internet-boeven om je te vangen met nepberichten (e-mail, WhatsApp, SMS) die er heel echt uitzien. Ze willen dat je op een foute link klikt om je gegevens te stelen.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Door phishing te herkennen, kun je voorkomen dat je in de val trapt en je gegevens kwijtraakt.</p>
+            </div>
+
+            <!-- Privacy -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🤫</span> Privacy</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Privacy betekent dat jij zelf kunt bepalen welke persoonlijke informatie je deelt en met wie. Wat je online doet en deelt, is jouw privacy.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het is belangrijk om je privacy te beschermen, want als je te veel deelt, kunnen vreemden je informatie misbruiken of zelfs in het echt lastigvallen.</p>
+            </div>
+
+            <!-- Ransomware -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🚫🔒</span> Ransomware</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een heel gemene soort malware die je bestanden op je computer 'gijzelt' (blokkeert), zodat je er niet meer bij kunt. Hackers vragen dan geld (ransom) om ze weer vrij te geven.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het is een extreem gevaarlijke dreiging. Goede voorzichtigheid en een virusscanner zijn essentieel om dit te voorkomen.</p>
+            </div>
+
+            <!-- Superhelden Checklist -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">📋✅</span> Superhelden Checklist</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een lijstje met dingen die je moet controleren als je een verdacht bericht krijgt.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het helpt je om snel te controleren of een mail veilig is: Check de Afzender, check de Link, en trap niet in Urgentie!</p>
+            </div>
+
+            <!-- Tweestapsverificatie (2FA) -->
+            <div class="word-card">
+                <div class="word-title-small"><span class="word-icon">🛡️</span> Tweestaps -verificatie (2FA)</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een extra veiligheidslaag voor je online accounts. Nadat je je wachtwoord hebt ingevoerd, moet je nog een tweede stap doen, zoals een code van je telefoon of je vingerafdruk.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het maakt het voor hackers veel moeilijker om in je account te komen, zelfs als ze je wachtwoord hebben gestolen. Het is een extra schild voor je kluis.</p>
+            </div>
+
+            <!-- Urgentie -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">⏰🚨</span> Urgentie</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een truc die oplichters gebruiken in hun berichten. Ze zeggen dat er snel iets moet gebeuren, anders zijn er erge gevolgen (bijvoorbeeld: "Je account wordt binnen 24 uur geblokkeerd!").</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Ze proberen je zo snel mogelijk te laten klikken, zonder dat je de tijd neemt om na te denken of te controleren. Echte bedrijven doen dit bijna nooit zo dringend.</p>
+            </div>
+
+            <!-- Wachtwoordmanager -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">🔑🔐</span> Wachtwoordmanager</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Dit is een speciale app of programma dat al je unieke, supersterke wachtwoorden veilig opslaat en onthoudt. Jij hoeft dan alleen het hoofdwachtwoord van de manager te onthouden.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het helpt je om overal een ander, supersterk wachtwoord te gebruiken, zonder dat je ze allemaal hoeft te onthouden. Dit is een heel veilige manier om met je wachtwoorden om te gaan.</p>
+            </div>
+            
+            <!-- Sigma Male/Female -->
+            <div class="word-card">
+                <div class="word-title-small"><span class="word-icon">🧠💡</span> Sigma Male/Female</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Verwijst naar een sterk, onafhankelijk en zelfstandig persoon die niet meeloopt met de massa, maar zelf nadenkt en eigen keuzes maakt.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het moedigt aan om sterk te zijn door hulp te vragen en zelfstandig na te denken over online gedrag, in plaats van zomaar anderen te volgen.</p>
+            </div>
+
+            <!-- Blurrrr it out! -->
+            <div class="word-card">
+                <div class="word-title"><span class="word-icon">💭⛔</span> Blurrrr it out!</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Een speelse uitdrukking om kinderen aan te moedigen om na te denken voordat ze iets online plaatsen of delen.</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">Het is een tip om voorzichtig te zijn en je privacy te beschermen door niet impulsief te handelen. Vraag jezelf af: "Zou ik dit ook op een groot scherm in de schoolkantine willen zien?"</p>
+            </div>
+
+            <!-- Time Scales (1k sec, 1m sec, etc.) -->
+            <div class="word-card">
+                <div class="word-title-small"><span class="word-icon">⏱️⏳</span> Tijdsschalen (1k, 1m, 1b, 1t, 1p sec)</div>
+                <p class="section-heading"><span class="icon">💡</span> Wat is het?</p>
+                <p class="section-text mb-3">Eenheden (<span class="math-equation">1k sec</span> = 1.000 sec, <span class="math-equation">1m sec</span> = 1.000.000 sec, <span class="math-equation">1b sec</span> = 1.000.000.000 sec, enz.) die de benodigde tijd aangeven voor een aanvaller om een wachtwoord te kraken met 'brute force'-methoden (alle combinaties proberen).</p>
+                <p class="section-heading"><span class="icon">🚀</span> Waarom belangrijk?</p>
+                <p class="section-text">De tijd neemt exponentieel toe naarmate een wachtwoord langer en complexer wordt. Dit illustreert waarom een lang en uniek wachtwoord extreem robuust is en praktisch onkraakbaar met de huidige technologie.</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

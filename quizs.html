@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Superhelden van het Internet</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS voor de font -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Zachte lichtblauwe achtergrond */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Zorgt ervoor dat de quiz bovenaan begint, handig voor langere schermen */
+            min-height: 100vh; /* Zorgt ervoor dat de body minimaal de hoogte van het viewport heeft */
+            padding: 20px; /* Ruimte rondom de quiz */
+        }
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 2.5rem; /* Ruimere padding */
+            border-radius: 1.5rem; /* Meer afgeronde hoeken */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Zachtere, grotere schaduw */
+            max-width: 768px; /* Max breedte voor desktop */
+            width: 100%;
+            text-align: center;
+            margin-top: 20px; /* Enkele ruimte boven de quiz */
+            margin-bottom: 20px;
+            position: relative; /* Voor absolute positionering van hint/score */
+        }
+        .question-text {
+            font-size: 1.5rem; /* Groter lettertype voor vragen */
+            font-weight: 600; /* Semi-bold */
+            margin-bottom: 2rem;
+            color: #334155; /* Donkerder tekst voor betere leesbaarheid */
+        }
+        .answer-button {
+            background-color: #e2e8f0; /* Lichtere grijs voor knoppen */
+            color: #475569;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem; /* Afgeronde hoeken voor knoppen */
+            margin-bottom: 0.75rem; /* Iets meer ruimte tussen knoppen */
+            width: 100%;
+            font-size: 1.1rem;
+            text-align: left;
+            transition: background-color 0.2s, transform 0.2s; /* Smooth transitions */
+            border: 2px solid transparent; /* Standaard geen rand */
+            cursor: pointer;
+        }
+        .answer-button:hover:not(.selected):not(.correct):not(.incorrect) {
+            background-color: #cbd5e1; /* Donkerdere hover kleur */
+            transform: translateY(-2px); /* Lichte lift bij hover */
+        }
+        .answer-button.selected {
+            border-color: #6366f1; /* Paarse rand bij selectie */
+            background-color: #e0e7ff; /* Lichtpaarse achtergrond bij selectie */
+        }
+        .answer-button.correct {
+            background-color: #d1fae5; /* Zachte groene achtergrond voor correct */
+            border-color: #34d399; /* Groene rand */
+            color: #065f46; /* Donkergroene tekst */
+        }
+        .answer-button.incorrect {
+            background-color: #fee2e2; /* Zachte rode achtergrond voor incorrect */
+            border-color: #ef4444; /* Rode rand */
+            color: #991b1b; /* Donkerrode tekst */
+        }
+        .rationale-text {
+            background-color: #eff6ff; /* Zeer lichte blauwe achtergrond voor rationale */
+            border-left: 4px solid #3b82f6; /* Blauwe balk links */
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: #1e40af; /* Donkerblauwe tekst */
+            text-align: left;
+        }
+        .navigation-button {
+            background-color: #4f46e5; /* Levendig paars */
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3); /* Subtiele schaduw */
+        }
+        .navigation-button:hover {
+            background-color: #4338ca; /* Donkerder paars bij hover */
+            transform: translateY(-2px);
+        }
+        .score-display, .hint-display {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #64748b; /* Medium grijs */
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .hint-display {
+            background-color: #fefce8; /* Zachte gele achtergrond voor hint */
+            border-left: 4px solid #facc15; /* Gele balk links */
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            font-style: italic;
+            color: #78350f; /* Donkerbruine tekst */
+            text-align: left;
+        }
+        .final-score {
+            font-size: 2rem; /* Groot lettertype voor eindscore */
+            font-weight: 700;
+            color: #16a34a; /* Groene kleur voor score */
+            margin-top: 2rem;
+        }
+        .restart-button {
+            background-color: #0d9488; /* Turquoise kleur voor herstart */
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(13, 148, 136, 0.3);
+        }
+        .restart-button:hover {
+            background-color: #0f766e; /* Donkerder turquoise */
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div id="quizApp" class="quiz-container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Quiz: Superhelden van het Internet</h1>
+
+        <div id="questionNumber" class="text-lg text-gray-600 mb-4"></div>
+        <div id="questionText" class="question-text"></div>
+
+        <div id="answerOptions" class="flex flex-col gap-3 mb-6">
+            <!-- Antwoordknoppen worden hier dynamisch ingevoegd -->
+        </div>
+
+        <div id="hintDisplay" class="hint-display hidden"></div>
+        <div id="rationaleDisplay" class="rationale-text hidden"></div>
+
+        <button id="nextButton" class="navigation-button hidden">Volgende Vraag</button>
+        <button id="restartButton" class="restart-button hidden">Opnieuw Beginnen</button>
+
+        <div id="scoreDisplay" class="score-display hidden"></div>
+        <div id="finalScoreDisplay" class="final-score hidden"></div>
+    </div>
+
+    <script>
+        // De quizdata, direct ingebed in de JavaScript
+        const quizData = {
+          "questions": [
+            {
+              "question": "Welk van de volgende wachtwoorden is het moeilijkst te kraken voor een hacker?",
+              "hint": "Denk aan wat een computer makkelijk kan combineren versus wat willekeurig is.",
+              "answerOptions": [
+                {
+                  "text": "W@chtw00rd!2024",
+                  "rationale": "Deze optie gebruikt veelvoorkomende vervangingen (0 voor O, @ voor a) en een jaartal, wat voorspelbare patronen zijn voor een computer.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "fiets.zolder.paarse.lamp",
+                  "rationale": "Het combineren van meerdere, niet-gerelateerde woorden creëert een lange en onvoorspelbare reeks die voor een computer extreem veel tijd kost om te raden.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "MijnGeheimeWachtwoord1",
+                  "rationale": "Hoewel dit wachtwoord lang is, bevat het een veelgebruikte zin die waarschijnlijk in de 'woordenboeken' van hackers voorkomt.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "qwerty12345",
+                  "rationale": "Dit is een combinatie van een toetsenbordpatroon en een opeenvolgende cijferreeks, twee van de makkelijkst te kraken wachtwoordtypes.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Je stelt tweestapsverificatie (2FA) in voor je e-mailaccount. Wat is het belangrijkste gevolg hiervan?",
+              "hint": "Wat gebeurt er als een dief de sleutel van je voordeur heeft, maar je ook een unieke code voor de binnendeur nodig hebt?",
+              "answerOptions": [
+                {
+                  "text": "Je hoeft je wachtwoord nooit meer te veranderen.",
+                  "rationale": "Tweestapsverificatie is een extra beveiligingslaag, maar het vervangt niet de noodzaak om af en toe een sterk wachtwoord te gebruiken of te wijzigen.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Niemand kan je ooit nog een e-mail sturen.",
+                  "rationale": "Deze beveiligingsmaatregel beïnvloedt alleen het inlogproces en heeft geen invloed op het ontvangen van e-mails.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Een hacker met jouw wachtwoord kan nog steeds niet inloggen zonder de tweede stap.",
+                  "rationale": "De kern van tweestapsverificatie is dat het hebben van alleen het wachtwoord niet langer voldoende is voor toegang; de tweede factor (zoals een code van je telefoon) is ook vereist.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Het maakt je computer sneller.",
+                  "rationale": "Tweestapsverificatie is een beveiligingsproces en heeft geen invloed op de prestaties of snelheid van je computer.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Je ontvangt een e-mail van 'Bol.com' met een link om je wachtwoord te resetten. De link is `http://www.bol-veilig.com`. Wat is de veiligste actie?",
+              "hint": "Focus op het webadres zelf. Is het domein (`.com`) direct na de bedrijfsnaam?",
+              "answerOptions": [
+                {
+                  "text": "Op de link klikken om te zien of de website er echt uitziet.",
+                  "rationale": "Het uiterlijk van een website kan perfect worden gekopieerd; de link zelf onthult de valstrik, en klikken is altijd een risico.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "De e-mail negeren en zelf naar de officiële website van Bol.com gaan om daar in te loggen.",
+                  "rationale": "Door zelf naar de bekende, officiële website te navigeren, omzeil je de potentieel gevaarlijke link volledig en kun je veilig controleren of er een probleem is met je account.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "De e-mail beantwoorden en vragen of deze echt is.",
+                  "rationale": "Als de e-mail van een oplichter komt, zullen ze bevestigen dat het 'echt' is. Dit biedt geen enkele zekerheid.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "De link kopiëren en in een nieuwe browser plakken.",
+                  "rationale": "Het openen van de link, ongeacht hoe, leidt je naar de frauduleuze website, wat het risico op malware of gegevensdiefstal met zich meebrengt.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Waarom is het gebruik van een wachtwoordmanager een goed idee?",
+              "hint": "Hoe kun je voor tientallen accounts een uniek en lang wachtwoord onthouden zonder ze op te schrijven?",
+              "answerOptions": [
+                {
+                  "text": "Omdat je dan overal hetzelfde, makkelijke wachtwoord kunt gebruiken.",
+                  "rationale": "Het doel van een wachtwoordmanager is juist het tegenovergestelde: het maakt het mogelijk om voor elke site een uniek en complex wachtwoord te gebruiken.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Omdat het je helpt om voor elk account een ander, sterk wachtwoord te gebruiken zonder ze allemaal te hoeven onthouden.",
+                  "rationale": "Een wachtwoordmanager fungeert als een digitale kluis die complexe, unieke wachtwoorden voor je genereert en onthoudt, waardoor je online veiligheid aanzienlijk toeneemt.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Omdat het je computer beschermt tegen virussen.",
+                  "rationale": "Een wachtwoordmanager beschermt je accountgegevens, maar een antivirusprogramma is nodig om je computer tegen virussen te beschermen.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Omdat je dan geen tweestapsverificatie meer nodig hebt.",
+                  "rationale": "Een wachtwoordmanager en tweestapsverificatie zijn twee verschillende tools die elkaar aanvullen voor maximale veiligheid; de een vervangt de ander niet.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Wat is een kenmerk van 'urgentie' in een phishing-e-mail?",
+              "hint": "Phishing-e-mails proberen je een bepaald gevoel te geven zodat je snel handelt zonder na te denken.",
+              "answerOptions": [
+                {
+                  "text": "Een aanbod voor een gratis product.",
+                  "rationale": "Hoewel dit verleidelijk is, is het belangrijkste kenmerk van urgentie de druk om onmiddellijk te handelen om een negatief gevolg te voorkomen.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Een vraag om je mening te geven over een product.",
+                  "rationale": "Dit is een verzoek om feedback en creëert geen druk of een gevoel dat er onmiddellijk actie moet worden ondernomen.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Een dreigement dat je account binnen 24 uur wordt geblokkeerd als je niet klikt.",
+                  "rationale": "Het creëren van een deadline met een negatieve consequentie is een klassieke tactiek om paniek te zaaien en je te dwingen snel en ondoordacht op een link te klikken.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Een nieuwsbrief met de laatste updates.",
+                  "rationale": "Een nieuwsbrief is informatief en bevat doorgaans geen dringende oproep tot actie met negatieve gevolgen.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Je krijgt een WhatsApp-bericht van een onbekend nummer dat beweert je broer te zijn die een nieuwe telefoon heeft. Hij vraagt om geld. Wat is de eerste stap die je moet nemen?",
+              "hint": "Hoe kun je controleren of de persoon aan de andere kant echt is wie hij of zij zegt te zijn, zonder het onbekende nummer te gebruiken?",
+              "answerOptions": [
+                {
+                  "text": "Meteen het geld overmaken omdat hij in de problemen zit.",
+                  "rationale": "Direct handelen zonder verificatie is precies wat een oplichter hoopt dat je doet.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Proberen je broer te bellen op zijn oude, bekende telefoonnummer.",
+                  "rationale": "Door contact op te nemen via een reeds bekend en vertrouwd kanaal, kun je direct verifiëren of het verhaal klopt, zonder de oplichter de kans te geven.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Het nieuwe nummer bellen om te horen of het zijn stem is.",
+                  "rationale": "Oplichters kunnen smoesjes verzinnen waarom ze niet kunnen praten, of de stem kan onduidelijk zijn. Het oude nummer bellen is een betrouwbaardere verificatiemethode.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Terugsturen via WhatsApp en vragen om een foto als bewijs.",
+                  "rationale": "Foto's kunnen gemakkelijk van sociale media worden gestolen. Dit is geen waterdichte methode van verificatie.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Waarom is het hergebruiken van wachtwoorden voor verschillende websites zo riskant?",
+              "hint": "Als een dief de sleutel van je huis heeft, voor welke andere deuren zou die sleutel dan ook niet moeten werken?",
+              "answerOptions": [
+                {
+                  "text": "Het is moeilijk om hetzelfde wachtwoord overal te onthouden.",
+                  "rationale": "Het hergebruiken van een wachtwoord maakt het juist makkelijker om te onthouden, wat de reden is dat veel mensen het doen, ondanks het risico.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Als één website wordt gehackt, kan een crimineel met die gegevens toegang proberen te krijgen tot al je andere accounts.",
+                  "rationale": "Dit domino-effect is het grootste gevaar. Een enkel datalek kan leiden tot de compromittering van al je accounts die hetzelfde wachtwoord gebruiken.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Websites kunnen je account blokkeren als ze zien dat je je wachtwoord hergebruikt.",
+                  "rationale": "Websites hebben geen manier om te weten of je een wachtwoord ergens anders gebruikt; de verantwoordelijkheid en het risico liggen volledig bij de gebruiker.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Het vertraagt de snelheid waarmee je kunt inloggen.",
+                  "rationale": "Het gebruik van hetzelfde wachtwoord heeft geen invloed op de inlogsnelheid; het risico is puur gerelateerd aan beveiliging.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Welk van de volgende is GEEN goede methode voor tweestapsverificatie?",
+              "hint": "Een tweede stap moet iets zijn dat alleen jij hebt of weet. Wat in deze lijst is openbare informatie?",
+              "answerOptions": [
+                {
+                  "text": "Een unieke code die naar je telefoon wordt gestuurd via een app.",
+                  "rationale": "Dit is een sterke vorm van 2FA, omdat het vereist dat je fysiek bezit hebt van je telefoon.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Je vingerafdruk gebruiken op je telefoon.",
+                  "rationale": "Biometrische gegevens zoals een vingerafdruk zijn uniek voor jou en een zeer veilige tweede factor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Je geboortedatum invoeren als extra controle.",
+                  "rationale": "Een geboortedatum is vaak openbaar of makkelijk te achterhalen informatie en biedt daarom geen echte extra beveiliging als tweede stap.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Een code ontvangen via een sms-bericht.",
+                  "rationale": "Hoewel er enkele risico's aan verbonden zijn, wordt het ontvangen van een code via sms nog steeds veel gebruikt als een geldige tweede verificatiestap.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Je ziet op straat een poster met een QR-code voor een 'gratis pizza'. Wat is het grootste risico als je deze code scant?",
+              "hint": "Een QR-code is niets meer dan een verpakte versie van iets anders dat je ook op een computer tegenkomt.",
+              "answerOptions": [
+                {
+                  "text": "Je telefoonabonnement kan duurder worden.",
+                  "rationale": "Het scannen van een code kan hier niet direct voor zorgen; de risico's liggen op het gebied van data en beveiliging.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "De QR-code kan je naar een phishing-website leiden om je gegevens te stelen.",
+                  "rationale": "Een QR-code is in wezen een link. Oplichters gebruiken ze steeds vaker om slachtoffers naar schadelijke websites te lokken, net als bij phishing via e-mail.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "De camera van je telefoon kan erdoor beschadigd raken.",
+                  "rationale": "Het scannen van een QR-code is een softwarematige actie en kan geen fysieke schade aan de hardware van je telefoon toebrengen.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "De pizza is waarschijnlijk niet lekker.",
+                  "rationale": "Hoewel dit waar zou kunnen zijn, is het financiële en privacyrisico van een phishing-aanval een veel groter en serieuzer probleem.",
+                  "isCorrect": false
+                }
+              ]
+            },
+            {
+              "question": "Wat is het belangrijkste doel van het controleren van 'HTTPS' in een webadres?",
+              "hint": "De 'S' in HTTPS staat voor een Engels woord dat met veiligheid te maken heeft.",
+              "answerOptions": [
+                {
+                  "text": "Om te controleren of de website populair is.",
+                  "rationale": "De populariteit van een website wordt niet aangegeven door HTTPS; het gaat puur om de beveiliging van de verbinding.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Om te zorgen dat de website sneller laadt.",
+                  "rationale": "Hoewel moderne protocollen die via HTTPS lopen snel kunnen zijn, is het primaire doel van de 'S' niet snelheid, maar de beveiliging van de data.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Om te verifiëren dat de verbinding tussen jou en de website versleuteld en veilig is.",
+                  "rationale": "HTTPS zorgt voor een versleutelde (encrypted) verbinding, wat betekent dat de gegevens die je uitwisselt met de site, zoals wachtwoorden, beschermd zijn tegen pottenkijkers.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Om te zien of de website gratis is.",
+                  "rationale": "De aanwezigheid van HTTPS zegt niets over of een website gratis content aanbiedt of niet; het is een beveiligingsstandaard.",
+                  "isCorrect": false
+                }
+              ]
+            }
+          ]
+        };
+
+        // Elementen ophalen uit de DOM
+        const questionNumberElement = document.getElementById('questionNumber');
+        const questionTextElement = document.getElementById('questionText');
+        const answerOptionsContainer = document.getElementById('answerOptions');
+        const rationaleDisplay = document.getElementById('rationaleDisplay');
+        const nextButton = document.getElementById('nextButton');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const finalScoreDisplay = document.getElementById('finalScoreDisplay');
+        const restartButton = document.getElementById('restartButton');
+        const hintDisplay = document.getElementById('hintDisplay');
+
+        // Quiz status variabelen
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let hasAnswered = false; // Voorkomt meerdere antwoorden per vraag
+
+        // Functie om antwoorden te shuffelen (Fisher-Yates algoritme)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Wissel elementen
+            }
+        }
+
+        // Laad een vraag
+        function loadQuestion() {
+            hasAnswered = false; // Reset de status voor de nieuwe vraag
+            rationaleDisplay.classList.add('hidden'); // Verberg rationale
+            nextButton.classList.add('hidden'); // Verberg de 'Volgende Vraag' knop
+            restartButton.classList.add('hidden'); // Verberg de 'Opnieuw Beginnen' knop
+            finalScoreDisplay.classList.add('hidden'); // Verberg eindscore
+            hintDisplay.classList.add('hidden'); // Verberg hint
+
+            // Controleer of er nog vragen zijn
+            if (currentQuestionIndex < quizData.questions.length) {
+                scoreDisplay.classList.remove('hidden'); // Toon scoreteller tijdens de quiz
+                const currentQuestion = quizData.questions[currentQuestionIndex];
+                questionNumberElement.textContent = `Vraag ${currentQuestionIndex + 1} van ${quizData.questions.length}`;
+                questionTextElement.textContent = currentQuestion.question;
+
+                // Toon de hint
+                hintDisplay.textContent = `Hint: ${currentQuestion.hint}`;
+                hintDisplay.classList.remove('hidden');
+
+                // Maak antwoordknoppen
+                answerOptionsContainer.innerHTML = ''; // Leeg de vorige opties
+                const shuffledOptions = [...currentQuestion.answerOptions]; // Maak een kopie om te shuffelen
+                shuffleArray(shuffledOptions); // Shuffle de antwoordopties
+
+                shuffledOptions.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.classList.add('answer-button');
+                    button.textContent = option.text;
+                    button.onclick = () => selectAnswer(option, button); // Geef de optie en de knop mee
+                    answerOptionsContainer.appendChild(button);
+                });
+            } else {
+                // Quiz is voorbij, toon de eindscore
+                showResults();
+            }
+        }
+
+        // Verwerk het geselecteerde antwoord
+        function selectAnswer(selectedOption, clickedButton) {
+            if (hasAnswered) return; // Voorkom dubbelklikken of meerdere antwoorden
+
+            hasAnswered = true; // Markeer dat de vraag beantwoord is
+            nextButton.classList.remove('hidden'); // Toon de 'Volgende Vraag' knop
+            hintDisplay.classList.add('hidden'); // Verberg de hint nadat is geantwoord
+
+            // Disable alle knoppen
+            Array.from(answerOptionsContainer.children).forEach(button => {
+                button.disabled = true;
+                // Voeg 'selected' klasse toe aan de geklikte knop
+                if (button === clickedButton) {
+                    button.classList.add('selected');
+                }
+            });
+
+            // Toon de rationale
+            rationaleDisplay.textContent = selectedOption.rationale;
+            rationaleDisplay.classList.remove('hidden');
+
+            // Kleur de knoppen en update score
+            if (selectedOption.isCorrect) {
+                score++;
+                clickedButton.classList.add('correct');
+            } else {
+                clickedButton.classList.add('incorrect');
+                // Vind de correcte knop en markeer deze ook
+                const correctOption = quizData.questions[currentQuestionIndex].answerOptions.find(opt => opt.isCorrect);
+                Array.from(answerOptionsContainer.children).forEach(button => {
+                    if (button.textContent === correctOption.text) {
+                        button.classList.add('correct');
+                    }
+                });
+            }
+            updateScoreDisplay();
+        }
+
+        // Ga naar de volgende vraag of toon resultaten
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        // Toon de huidige score
+        function updateScoreDisplay() {
+            scoreDisplay.textContent = `Score: ${score} / ${quizData.questions.length}`;
+        }
+
+        // Toon de eindscore
+        function showResults() {
+            questionNumberElement.textContent = 'Quiz Voltooid!';
+            questionTextElement.textContent = 'Je hebt de quiz afgerond!';
+            answerOptionsContainer.innerHTML = ''; // Leeg antwoordopties
+            rationaleDisplay.classList.add('hidden'); // Verberg rationale
+            nextButton.classList.add('hidden'); // Verberg volgende knop
+            scoreDisplay.classList.add('hidden'); // Verberg scoreteller
+
+            finalScoreDisplay.textContent = `Je eindscore: ${score} van de ${quizData.questions.length} vragen correct!`;
+            finalScoreDisplay.classList.remove('hidden');
+            restartButton.classList.remove('hidden'); // Toon herstart knop
+        }
+
+        // Herstart de quiz
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion(); // Laad de eerste vraag opnieuw
+        }
+
+        // Event listeners
+        nextButton.addEventListener('click', nextQuestion);
+        restartButton.addEventListener('click', resetQuiz);
+
+        // Start de quiz wanneer de pagina geladen is
+        document.addEventListener('DOMContentLoaded', loadQuestion);
+    </script>
+</body>
+</html>
