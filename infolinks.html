@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belangrijke Links voor Internet Superhelden Families!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f7ff; /* Lichte achtergrondkleur */
+            color: #1e293b; /* Donkere tekstkleur */
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        h1, h2, h3 {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            color: #1e40af; /* Donkerblauw */
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background-color: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            animation: fadeIn 0.8s ease-out;
+            text-align: center;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .link-card {
+            background-color: #f8fafc; /* Zeer lichtgrijze achtergrond */
+            border-radius: 1.25rem; /* Afgeronde hoeken */
+            padding: 1.5rem;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid #e2e8f0; /* Lichte rand */
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            height: 100%; /* Zorgt dat kaarten even hoog zijn in een grid */
+        }
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        .link-card-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #4f46e5; /* Indigo kleur */
+            margin-bottom: 0.75rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .link-card-icon {
+            font-size: 2rem;
+            margin-right: 0.75rem;
+        }
+        .link-description {
+            color: #475569; /* Donkergrijs */
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        .actual-link {
+            color: #3b82f6; /* Blauw voor links */
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            word-break: break-all; /* Zorgt dat lange URL's afbreken */
+            font-size: 1rem;
+        }
+        .actual-link:hover {
+            text-decoration: underline;
+            color: #1e40af; /* Donkerder blauw on hover */
+        }
+        .actual-link-icon {
+            font-size: 1.75rem;
+            margin-right: 0.5rem;
+        }
+        .card-image {
+            max-width: 150px; /* Adjust size as needed */
+            height: auto;
+            margin: 0 auto 1rem auto; /* Center image and add bottom margin */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Responsive aanpassingen */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .link-card-title {
+                font-size: 1.5rem;
+            }
+            .link-card-icon {
+                font-size: 1.75rem;
+            }
+            .link-description {
+                font-size: 0.85rem;
+            }
+            .actual-link {
+                font-size: 0.95rem;
+            }
+            .actual-link-icon {
+                font-size: 1.5rem;
+            }
+            .card-image {
+                max-width: 100px; /* Smaller image on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl md:text-5xl mb-4">✨ Internet Superhelden Tips voor de Familie! ✨</h1>
+        <p class="text-lg md:text-xl text-slate-700 mb-8">
+            Hoi ouders en andere familieleden! Hier zijn een paar handige links die jullie kunnen helpen om samen met de kinderen nog veiliger en slimmer online te zijn.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Leuke en leerzame link om samen te ontdekken! -->
+            <div class="link-card">
+                <h3 class="link-card-title"><span class="link-card-icon">💡</span> Leuke en leerzame link om samen te ontdekken!</h3>
+                <img src="withgrandparents.png" alt="[Afbeelding van een familie die samen leert]" class="card-image">
+                <p class="link-description">
+                    Wil je samen met je opa, oma, papa, mama of andere familieleden iets interessants doen? Bekijk dan deze website:
+                </p>
+                <a href="https://arda.nl/demo/senioren/senioren.html" target="_blank" class="actual-link">
+                    <span class="actual-link-icon">🔗</span> arda.nl/demo/senioren/senioren.html
+                </a>
+                <p class="text-sm text-gray-600 mt-2">
+                    Op deze site vind je eenvoudige uitleg over digitale onderwerpen, speciaal gemaakt voor volwassenen en senioren. Het is een initiatief van verschillende ministeries en organisaties.
+                </p>
+            </div>
+
+            <!-- Veilig internetten -->
+            <div class="link-card">
+                <h3 class="link-card-title"><span class="link-card-icon">🛡️</span> Veilig internetten</h3>
+                <img src="kids-internet2.png" alt="[Afbeelding van een schild of slot]" class="card-image">
+                <p class="link-description">
+                    Wil je meer leren over veilig online zijn? Kijk dan op:
+                </p>
+                <a href="https://veiliginternetten.nl" target="_blank" class="actual-link">
+                    <span class="actual-link-icon">🔗</span> veiliginternetten.nl
+                </a>
+            </div>
+
+            <!-- Test je wachtwoord -->
+            <div class="link-card">
+                <h3 class="link-card-title"><span class="link-card-icon">🔑</span> Test je wachtwoord</h3>
+                <img src="testpassword.png" alt="[Afbeelding van een sleutel of wachtwoord]" class="card-image">
+                <p class="link-description">
+                    Hoe sterk is jouw wachtwoord? Doe de test:
+                </p>
+                <a href="https://veiliginternetten.nl/wachtwoordkraaktest/" target="_blank" class="actual-link">
+                    <span class="actual-link-icon">🔗</span> veiliginternetten.nl/wachtwoordkraaktest/
+                </a>
+            </div>
+
+            <!-- Een voorbeeld van Phishing herkennen -->
+            <div class="link-card">
+                <h3 class="link-card-title"><span class="link-card-icon">🎣</span> Een voorbeeld van Phishing herkennen</h3>
+                <img src="phishingmail.png" alt="[Afbeelding van een phishing e-mail]" class="card-image">
+                <p class="link-description">
+                    Download hier een handige checklist om phishing te herkennen:
+                </p>
+                <a href="phishingherkennen_checklist_a4.pdf" target="_blank" class="actual-link">
+                    <span class="actual-link-icon">📄</span> Phishing Herkennen Checklist (PDF)
+                </a>
+                <p class="text-sm text-gray-600 mt-2">
+                    (Let op: dit is een voorbeeld PDF van de Rijksoverheid, het kan zijn dat de directe link in de toekomst verandert.)
+                </p>
+            </div>
+        </div>
+
+        <p class="text-xl md:text-2xl font-bold text-indigo-700 mt-12">
+            Samen maken we het internet veiliger! 🤝
+        </p>
+    </div>
+</body>
+</html>
