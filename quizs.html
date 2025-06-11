@@ -131,6 +131,28 @@
             background-color: #0f766e; /* Donkerder turquoise */
             transform: translateY(-2px);
         }
+        /* Style for the back to main navigation button */
+        .main-nav-button {
+            background-color: #3b82f6; /* Blue */
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+            display: inline-flex; /* To align icon and text */
+            align-items: center;
+        }
+        .main-nav-button:hover {
+            background-color: #2563eb; /* Darker blue */
+            transform: translateY(-2px);
+        }
+        .main-nav-button-icon {
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -152,6 +174,11 @@
 
         <div id="scoreDisplay" class="score-display hidden"></div>
         <div id="finalScoreDisplay" class="final-score hidden"></div>
+
+        <!-- Terug naar Hoofdnavigatie knop -->
+        <a href="index.html" class="main-nav-button">
+            <span class="main-nav-button-icon">🏠</span> Terug naar Hoofdnavigatie
+        </a>
     </div>
 
     <script>
